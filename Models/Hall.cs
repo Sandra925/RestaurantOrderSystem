@@ -11,10 +11,10 @@
             {
                 _tables[i] = tables[i];
             }
-        }
-
+        } 
         public int Id { get; set; }
         public string Name { get; set; }
         private Table[] _tables { get; set; }
+        
     }
 }
