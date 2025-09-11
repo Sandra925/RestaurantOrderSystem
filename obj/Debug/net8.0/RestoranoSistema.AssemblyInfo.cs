@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("RestoranoSistema")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+823aaf26e3af785901ac1dff7a7e24749ad6efa3")]
 [assembly: System.Reflection.AssemblyProductAttribute("RestoranoSistema")]
 [assembly: System.Reflection.AssemblyTitleAttribute("RestoranoSistema")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

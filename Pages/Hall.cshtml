@@ -3,6 +3,10 @@
 @model RestoranoSistema.Pages.HallModel
 @{
     <form method="post">
+        <label>Row</label>
+        <input type="number" name ="row" class="add-table-row" />
+        <label>Column</label>
+        <input type="number" name ="col" class="add-table-col" />
         <button type="submit" asp-asp-page-handler="AddTable">Add Table</button>
     </form>
     <div class="grid">
