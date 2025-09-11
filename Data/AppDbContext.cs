@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using RestoranoSistema.Models;
+using RestaurantOrderSystem.Models;
 
-namespace RestoranoSistema.Data
+namespace RestaurantOrderSystem.Data
 {
     public class AppDbContext :DbContext
     {

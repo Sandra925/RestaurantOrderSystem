@@ -1,25 +1,30 @@
 using Microsoft.AspNetCore.Mvc;
-using RestoranoSistema.Models;
+using RestaurantOrderSystem.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using RestaurantOrderSystem.Data;
 
-namespace RestoranoSistema.Pages
+namespace RestaurantOrderSystem.Pages
 {
     public class HallModel : PageModel
     {
+   
+        private readonly AppDbContext _context;
+        public HallModel(AppDbContext context)
+        {
+            _context = context;
+        }
         public List<Table> Tables { get; set; } = new List<Table>();
         public void OnGet()
         {
-            Tables = new List<Table>
-            {
-                new Table(1, 1, null, 4) {Row = 1, Col = 1},
-                new Table(2, 2, null, 1) {Row = 7, Col = 5}
-            };
+            Tables = _context.Tables.ToList();
         }
-        public void OnPostAddTable(int row, int col, int number)
+        public IActionResult OnPostAddTable(int row, int col, int number)
         {
             int id = Tables.Count();
-            Table table = new Table(id, number, null, 0);
-            Tables.Add(table);
+            Table table = new Table(id, number, null, 0) { Row = row, Col = col } ;
+            _context.Tables.Add(table);
+            _context.SaveChanges();
+            return RedirectToPage();
         }
 
     }

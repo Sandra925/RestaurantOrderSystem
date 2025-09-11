@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestoranoSistema.Data;
+using RestaurantOrderSystem.Data;
 
 #nullable disable
 
-namespace RestoranoSistema.Migrations
+namespace RestaurantOrderSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20250911164220_InitialCommit")]

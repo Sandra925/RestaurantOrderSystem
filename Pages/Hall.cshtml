@@ -1,13 +1,13 @@
 ﻿@page
-@using RestoranoSistema.Models
-@model RestoranoSistema.Pages.HallModel
+@using RestaurantOrderSystem.Models
+@model RestaurantOrderSystem.Pages.HallModel
 @{
-    <form method="post">
+    <form method="post" asp-page-handler="AddTable">
         <label>Row</label>
         <input type="number" name ="row" class="add-table-row" />
         <label>Column</label>
         <input type="number" name ="col" class="add-table-col" />
-        <button type="submit" asp-asp-page-handler="AddTable">Add Table</button>
+        <button type="submit">Add Table</button>
     </form>
     <div class="grid">
         @for (int row = 0; row < 10; row++)

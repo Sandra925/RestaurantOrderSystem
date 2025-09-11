@@ -1,4 +1,4 @@
-﻿namespace RestoranoSistema.Models
+﻿namespace RestaurantOrderSystem.Models
 {
     public class Hall
     {

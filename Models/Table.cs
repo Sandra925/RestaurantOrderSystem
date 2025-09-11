@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace RestoranoSistema.Models
+namespace RestaurantOrderSystem.Models
 {
     public class Table
     {

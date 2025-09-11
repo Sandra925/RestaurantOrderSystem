@@ -1,4 +1,4 @@
-using RestoranoSistema.Data;
+using RestaurantOrderSystem.Data;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

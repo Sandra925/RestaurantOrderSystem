@@ -2,11 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestoranoSistema.Data;
+using RestaurantOrderSystem.Data;
 
 #nullable disable
 
-namespace RestoranoSistema.Migrations
+namespace RestaurantOrderSystem.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot

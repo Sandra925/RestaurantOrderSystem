@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace RestoranoSistema.Migrations
+namespace RestaurantOrderSystem.Migrations
 {
     /// <inheritdoc />
     public partial class InitialCommit : Migration
