@@ -1,0 +1,26 @@
+﻿@page
+@using RestoranoSistema.Models
+@model RestoranoSistema.Pages.HallModel
+@{
+    <form method="post">
+        <button type="submit" asp-asp-page-handler="AddTable">Add Table</button>
+    </form>
+    <div class="grid">
+        @for (int row = 0; row < 10; row++)
+        {
+            <div class="grid-row">
+                @for (int col = 0; col < 10; col++)
+                {
+                    var hasTable = Model.Tables.Any(t => t.Row == row && t.Col == col);
+                    <div class="grid-cell">
+                        @if (hasTable)
+                        {
+                            <div class="table-cell">🟦</div>
+                        }
+                    </div>
+                }
+            </div>
+        }
+    </div>
+
+}
