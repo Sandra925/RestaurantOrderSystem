@@ -7,9 +7,27 @@
         <input type="number" name ="row" class="add-table-row" />
         <label>Column</label>
         <input type="number" name ="col" class="add-table-col" />
+        <label>Number</label>
+        <input type="number" name="num" class="add-table-num" />
         <button type="submit">Add Table</button>
     </form>
-    <div class="grid">
+    <form method="post" asp-page-handler="DeleteTable">
+        <label>Row</label>
+        <input type="number" name="row" class="delete-table-row" />
+        <label>Column</label>
+        <input type="number" name="col" class="delete-table-col" />
+        <button type="submit">Delete Table</button>
+    </form>
+    <form method="post" asp-page-handler="DeleteTables">
+        <button type="submit">Delete All Tables</button>
+    </form>
+    <form method="post" asp-page-handler="UpdateTable">
+        <label>Table ID</label>
+        <input type="number" />    
+    </form>
+  
+    <h3>Table Layout</h3>
+    <div class="grid-container">
         @for (int row = 0; row < 10; row++)
         {
             <div class="grid-row">
@@ -19,7 +37,16 @@
                     <div class="grid-cell">
                         @if (hasTable)
                         {
-                            <div class="table-cell">🟦</div>
+                            var table = Model.Tables.First(t => t.Row == row && t.Col == col);
+                            <div class="table-cell" title="Table @table.Number (ID: @table.Id)">
+                                @table.Number
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="empty-cell">
+                           
+                            </div>
                         }
                     </div>
                 }
