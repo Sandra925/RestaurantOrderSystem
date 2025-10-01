@@ -30,7 +30,7 @@ namespace RestaurantOrderSystem.Controllers
             _context.Items.Add(item);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetItem", new { id = item.Id });
+            return CreatedAtAction("GetItem", new { id = item.Id }, item);
         }
         // GET: api/items
         [HttpGet]
