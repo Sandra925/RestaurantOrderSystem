@@ -65,5 +65,26 @@ namespace RestaurantOrderSystem.Controllers
             return NoContent();
         }
 
+        //PUT: api/items/id
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateItem(int id, [FromBody] Item updatedItem)
+        {
+            if (id != updatedItem.Id)
+                return BadRequest(new { message = "ID mismatch" });
+
+            if (updatedItem.Price < 0)
+                return UnprocessableEntity(new { message = "Price must be positive numbers" });
+
+            var item = await _context.Items.FindAsync(id);
+            if (item == null)
+                return NotFound(new { message = "Table not found" });
+
+            item.Name = updatedItem.Name;
+            item.Price = updatedItem.Price;
+
+            await _context.SaveChangesAsync();
+            return Ok(item);
+        }
+
     }
 }

@@ -14,12 +14,22 @@
         <input type="number" name="id" />
         <button type="submit">Delete Item</button>
     </form>
+    <form method="post" asp-page-handler="UpdateItem">
+        <label>ItemID:</label>
+        <input type="number" name="id" />
+        <label>Name</label>
+        <input name="name"/>
+        <label>Price</label>
+        <input name="price" />
+        <button type="submit">Update Item</button>
+    
+    </form>
     List<Item> items = Model.Items;
     @foreach(Item item in items)
     {
         <table class="row">
+            <td>@item.Id</td>
             <td>@item.Name</td>
-
             <td>@item.Price</td>
         </table>
     }

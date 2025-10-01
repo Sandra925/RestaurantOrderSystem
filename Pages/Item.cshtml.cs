@@ -39,7 +39,20 @@ namespace RestaurantOrderSystem.Pages
         {
 
             var response = await _httpClient.DeleteAsync($"api/items/deleteItem/{id}");
-            if(response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToPage();
+            }
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostUpdateItem(int id, string name, decimal price)
+        {
+            var item = new Item {Id = id, Name = name, Price = price };
+
+            var response = await _httpClient.PutAsJsonAsync($"api/items/{id}", item);
+
+            if (response.IsSuccessStatusCode)
             {
                 return RedirectToPage();
             }
