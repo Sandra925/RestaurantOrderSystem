@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace RestaurantOrderSystem.Controllers
 {
-    //CRUD!!!! GERI RETURNAI, POSTMAN
     [ApiController]
     [Route("api/[controller]")]
     public class TablesController : ControllerBase
@@ -21,7 +20,12 @@ namespace RestaurantOrderSystem.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Table>>> GetTables()
         {
-            return await _context.Tables.ToListAsync();
+            List<Table> tables = await _context.Tables.ToListAsync();
+            if(tables.Count == 0)
+            {
+                return NotFound();
+            }
+            return tables;
         }
 
         // GET: api/tables/5
@@ -37,16 +41,19 @@ namespace RestaurantOrderSystem.Controllers
 
             return table;
         }
-        [HttpPatch]
-        public async Task<ActionResult> UpdateTable(Table table)
-        {
-            return NoContent();
-        }
 
         // POST: api/tables
         [HttpPost]
         public async Task<ActionResult<Table>> PostTable(Table table)
         {
+            if(table == null)
+            {
+                return BadRequest("Payload is null");
+            }
+            if (!ModelState.IsValid)
+            {
+                return UnprocessableEntity(ModelState);
+            }
             if (table.Id == 0)
             {
                 var random = new Random();
@@ -85,12 +92,33 @@ namespace RestaurantOrderSystem.Controllers
         public async Task<IActionResult> DeleteTables()
         {
             List<Table> tables = await _context.Tables.ToListAsync();
-            foreach(Table table in tables)
+            foreach (Table table in tables)
             {
                 _context.Tables.Remove(table);
             }
             await _context.SaveChangesAsync();
             return NoContent();
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTable(int id, [FromBody] Table updatedTable)
+        {
+            if (id != updatedTable.Id)
+                return BadRequest(new { message = "ID mismatch" });
+
+            if (updatedTable.Row < 0 || updatedTable.Col < 0)
+                return UnprocessableEntity(new { message = "Row and Col must be positive numbers" });
+
+            var table = await _context.Tables.FindAsync(id);
+            if (table == null)
+                return NotFound(new { message = "Table not found" });
+
+            table.Row = updatedTable.Row;
+            table.Col = updatedTable.Col;
+            table.Number = updatedTable.Number;
+
+            await _context.SaveChangesAsync();
+            return Ok(table);
+        }
+
     }
 }

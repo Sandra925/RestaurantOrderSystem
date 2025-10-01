@@ -7,5 +7,6 @@ namespace RestaurantOrderSystem.Data
     {
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<Table> Tables { get; set; }
+        public DbSet<Item> Items { get; set; }
     }
 }

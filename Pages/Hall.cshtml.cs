@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using RestaurantOrderSystem.Models;
 using System.Net.Http.Json;
 
@@ -63,6 +64,25 @@ namespace RestaurantOrderSystem.Pages
             {
                 return RedirectToPage();
             }
+            return Page();
+        }
+        public async Task<IActionResult> OnPostUpdateTableAsync(int id, int row, int col, int num)
+        {
+            var updatedTable = new Table
+            {
+                Id = id,
+                Row = row,
+                Col = col,
+                Number = num
+            };
+
+            var response = await _httpClient.PutAsJsonAsync($"api/tables/{id}", updatedTable);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToPage();
+            }
+
             return Page();
         }
 

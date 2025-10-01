@@ -1,0 +1,22 @@
+﻿@page
+@using RestaurantOrderSystem.Models
+@model RestaurantOrderSystem.Pages.ItemModel
+@{
+    <form method="post" asp-page-handler="AddItem">
+        <label>Name</label>
+        <input name="name"/>
+        <label>Price</label>
+        <input name="price" />
+        <button type="submit">Add Item</button>
+    </form>
+
+    List<Item> items = Model.Items;
+    @foreach(Item item in items)
+    {
+        <table class="row">
+            <td>@item.Name</td>
+
+            <td>@item.Price</td>
+        </table>
+    }
+}

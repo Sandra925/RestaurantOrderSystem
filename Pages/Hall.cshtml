@@ -2,6 +2,7 @@
 @using RestaurantOrderSystem.Models
 @model RestaurantOrderSystem.Pages.HallModel
 @{
+    <h6>Create Table</h6>
     <form method="post" asp-page-handler="AddTable">
         <label>Row</label>
         <input type="number" name ="row" class="add-table-row" />
@@ -11,6 +12,7 @@
         <input type="number" name="num" class="add-table-num" />
         <button type="submit">Add Table</button>
     </form>
+    <h6>Delete Table</h6>
     <form method="post" asp-page-handler="DeleteTable">
         <label>Row</label>
         <input type="number" name="row" class="delete-table-row" />
@@ -18,12 +20,25 @@
         <input type="number" name="col" class="delete-table-col" />
         <button type="submit">Delete Table</button>
     </form>
+    <h6>Delete Tables</h6>
     <form method="post" asp-page-handler="DeleteTables">
         <button type="submit">Delete All Tables</button>
     </form>
+    <h6>Update Table</h6>
     <form method="post" asp-page-handler="UpdateTable">
         <label>Table ID</label>
-        <input type="number" />    
+        <input type="number" name="id"/>
+
+        <label>Row</label>
+        <input type="number" name="row" />
+
+        <label>Column</label>
+        <input type="number" name="col" />
+
+        <label>Number</label>
+        <input type="number" name="num"/>
+
+        <button type="submit">Update</button>
     </form>
   
     <h3>Table Layout</h3>

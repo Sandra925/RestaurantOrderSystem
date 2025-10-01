@@ -3222,9 +3222,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\K203082\\Desktop\\ktu\\7 semestras\\saitynai\\RestoranoSistema\\RestoranoSistema\\RestoranoSistema.csproj",
-      "projectName": "RestoranoSistema",
-      "projectPath": "C:\\Users\\K203082\\Desktop\\ktu\\7 semestras\\saitynai\\RestoranoSistema\\RestoranoSistema\\RestoranoSistema.csproj",
+      "projectUniqueName": "C:\\Users\\K203082\\Desktop\\ktu\\7 semestras\\saitynai\\RestoranoSistema\\RestoranoSistema\\RestaurantOrderSystem.csproj",
+      "projectName": "RestaurantOrderSystem",
+      "projectPath": "C:\\Users\\K203082\\Desktop\\ktu\\7 semestras\\saitynai\\RestoranoSistema\\RestoranoSistema\\RestaurantOrderSystem.csproj",
       "packagesPath": "C:\\Users\\K203082\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\K203082\\Desktop\\ktu\\7 semestras\\saitynai\\RestoranoSistema\\RestoranoSistema\\obj\\",
       "projectStyle": "PackageReference",
