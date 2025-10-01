@@ -38,7 +38,7 @@ namespace RestaurantOrderSystem.Controllers
         {
             return await _context.Items.ToListAsync();
         }
-        //GET: api/item/id
+        //GET: api/items/id
         [HttpGet("{id}")]
         public async Task<ActionResult<Item>> GetItem(int id)
         {
@@ -49,6 +49,20 @@ namespace RestaurantOrderSystem.Controllers
                 return NotFound();
             }
             return item;
+        }
+
+        //DELETE: api/items/deleteItem/id
+        [HttpDelete("deleteItem/{id}")]
+        public async Task<IActionResult> DeleteItem(int id)
+        {
+            var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == id);
+            if(item == null)
+            {
+                return NotFound();
+            }
+            _context.Items.Remove(item);
+            await _context.SaveChangesAsync();
+            return NoContent();
         }
 
     }

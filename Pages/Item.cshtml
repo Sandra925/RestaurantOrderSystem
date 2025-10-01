@@ -9,7 +9,11 @@
         <input name="price" />
         <button type="submit">Add Item</button>
     </form>
-
+    <form method="post" asp-page-handler="DeleteItem">
+        <label>Item ID:</label>
+        <input type="number" name="id" />
+        <button type="submit">Delete Item</button>
+    </form>
     List<Item> items = Model.Items;
     @foreach(Item item in items)
     {
@@ -19,4 +23,5 @@
             <td>@item.Price</td>
         </table>
     }
+
 }

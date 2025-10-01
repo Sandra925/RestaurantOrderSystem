@@ -99,6 +99,8 @@ namespace RestaurantOrderSystem.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        //PUT: api/tables/id
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTable(int id, [FromBody] Table updatedTable)
         {
