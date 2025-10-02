@@ -20,7 +20,6 @@ namespace RestaurantOrderSystem.Models
         [Range(1, 50)]
         public int Quantity { get; set; }
 
-        // Navigation properties
         [JsonIgnore]
         public virtual Order Order { get; set; }
 

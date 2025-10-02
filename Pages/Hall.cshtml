@@ -54,7 +54,10 @@
                         {
                             var table = Model.Tables.First(t => t.Row == row && t.Col == col);
                             <div class="table-cell" title="Table @table.Number (ID: @table.Id)">
-                                @table.Number
+                                <a asp-page="Table" asp-route-id="@table.Id">
+                                    @table.Number
+                                </a>
+                                
                             </div>
                         }
                         else
