@@ -1,25 +1,80 @@
-﻿namespace RestaurantOrderSystem.Models
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
+
+namespace RestaurantOrderSystem.Models
 {
     public class Order
     {
-        public int Id { get; set; }
-        private Item[] _items;
-        public Order(int id, Item[] items) 
+        public Order() { }
+
+        public Order(int tableId, int customerCount)
         {
-            Id = id;
-            _items = new Item[items.Length];
-            for (int i = 0; i < items.Length; i++)
+            TableId = tableId;
+            CustomerCount = customerCount;
+            CreatedAt = DateTime.UtcNow;
+            Status = OrderStatus.Pending;
+        }
+
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required]
+        public DateTime CreatedAt { get; set; }
+
+        [Required]
+        public DateTime? UpdatedAt { get; set; }
+
+        [Required]
+        public OrderStatus Status { get; set; }
+
+        [Required]
+        [Range(1, 20)]
+        public int CustomerCount { get; set; }
+
+        public decimal TotalAmount => OrderItems?.Sum(oi => oi.Quantity * oi.Item.Price) ?? 0;
+
+        // Foreign keys and navigation properties
+        [Required]
+        public int TableId { get; set; }
+
+        [JsonIgnore]
+        public virtual Table Table { get; set; }
+
+        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+
+        // Methods
+        public void AddItem(Item item, int quantity = 1)
+        {
+            var existingItem = OrderItems.FirstOrDefault(oi => oi.ItemId == item.Id);
+            if (existingItem != null)
             {
-                _items[i] = items[i];
+                existingItem.Quantity += quantity;
+            }
+            else
+            {
+                OrderItems.Add(new OrderItem { OrderId = Id, ItemId = item.Id, Item = item, Quantity = quantity });
+            }
+            UpdatedAt = DateTime.UtcNow;
+        }
+
+        public void RemoveItem(int itemId)
+        {
+            var itemToRemove = OrderItems.FirstOrDefault(oi => oi.ItemId == itemId);
+            if (itemToRemove != null)
+            {
+                OrderItems.Remove(itemToRemove);
+                UpdatedAt = DateTime.UtcNow;
             }
         }
-        /// <summary>
-        /// Gets all items from a list
-        /// </summary>
-        /// <returns>Item array</returns>
-        public Item[] GetItems()
+
+        public void UpdateStatus(OrderStatus newStatus)
         {
-            return (Item[])_items.Clone();
+            Status = newStatus;
+            UpdatedAt = DateTime.UtcNow;
         }
     }
 }

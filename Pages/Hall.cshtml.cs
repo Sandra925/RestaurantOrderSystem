@@ -34,7 +34,8 @@ namespace RestaurantOrderSystem.Pages
             {
                 Row = row,
                 Col = col,
-                Number = num
+                Number = num,
+                Status = TableStatus.Available
             };
 
             var response = await _httpClient.PostAsJsonAsync("api/tables", table);
@@ -43,7 +44,11 @@ namespace RestaurantOrderSystem.Pages
             {
                 return RedirectToPage();
             }
-            return Page();
+            else
+            {
+                var errorContent = await response.Content.ReadAsStringAsync();
+                return Page();
+            }
         }
 
         public async Task<IActionResult> OnPostDeleteTable(int row, int col)
