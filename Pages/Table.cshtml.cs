@@ -8,6 +8,7 @@ namespace RestaurantOrderSystem.Pages
     {
         private readonly HttpClient _httpClient;
         public Table Table { get; set; } = new Table();
+        public Order? CurrentOrder { get; set; }
 
         public TableModel(IHttpClientFactory httpClientFactory)
         {

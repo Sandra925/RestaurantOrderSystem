@@ -77,7 +77,7 @@ namespace RestaurantOrderSystem.Controllers
 
             var item = await _context.Items.FindAsync(id);
             if (item == null)
-                return NotFound(new { message = "Table not found" });
+                return NotFound(new { message = "Item not found" });
 
             item.Name = updatedItem.Name;
             item.Price = updatedItem.Price;

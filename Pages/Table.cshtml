@@ -2,7 +2,19 @@
 @using RestaurantOrderSystem.Models
 @model RestaurantOrderSystem.Pages.TableModel
 @{
-    <h2>Table @Model.Table.Number</h2>
-    <p>ID: @Model.Table.Id</p>
-    <p>Row: @Model.Table.Row, Col: @Model.Table.Col</p>
+    <div class="table-info-container">
+        <h2>Table @Model.Table.Number</h2>
+        <p>ID: @Model.Table.Id</p>
+        <p>Row: @Model.Table.Row, Col: @Model.Table.Col</p>
+    </div>
+    <div class="activate-table-container">
+    <form method="post" asp-page="/Order" asp-page-handler="AddOrder">
+            <input type="hidden" name="tableId" value="@Model.Table.Id" />
+            <label>Customer Count</label>
+            <input type="number" required />
+            <button type="submit" class="btn-primary">Make an Order</button>
+    </form>
+        
+    </div>
+    
 }
