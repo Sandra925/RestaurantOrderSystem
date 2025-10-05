@@ -15,8 +15,10 @@ namespace RestaurantOrderSystem.Models
             TableId = tableId;
             CustomerCount = customerCount;
             CreatedAt = DateTime.UtcNow;
+            UpdatedAt = DateTime.UtcNow;
             Status = OrderStatus.Pending;
         }
+
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,7 +27,6 @@ namespace RestaurantOrderSystem.Models
         [Required]
         public DateTime CreatedAt { get; set; }
 
-        [Required]
         public DateTime? UpdatedAt { get; set; }
 
         [Required]
@@ -35,46 +36,15 @@ namespace RestaurantOrderSystem.Models
         [Range(1, 20)]
         public int CustomerCount { get; set; }
 
-        public decimal TotalAmount => OrderItems?.Sum(oi => oi.Quantity * oi.Item.Price) ?? 0;
+        public decimal? TotalAmount => OrderItems?.Sum(oi => oi.Quantity * oi.Item.Price) ?? 0;
 
-        // Foreign keys and navigation properties
         [Required]
         public int TableId { get; set; }
 
         [JsonIgnore]
-        public virtual Table Table { get; set; }
+        public virtual Table? Table { get; set; }
 
         public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
-        // Methods
-        public void AddItem(Item item, int quantity = 1)
-        {
-            var existingItem = OrderItems.FirstOrDefault(oi => oi.ItemId == item.Id);
-            if (existingItem != null)
-            {
-                existingItem.Quantity += quantity;
-            }
-            else
-            {
-                OrderItems.Add(new OrderItem { OrderId = Id, ItemId = item.Id, Item = item, Quantity = quantity });
-            }
-            UpdatedAt = DateTime.UtcNow;
-        }
-
-        public void RemoveItem(int itemId)
-        {
-            var itemToRemove = OrderItems.FirstOrDefault(oi => oi.ItemId == itemId);
-            if (itemToRemove != null)
-            {
-                OrderItems.Remove(itemToRemove);
-                UpdatedAt = DateTime.UtcNow;
-            }
-        }
-
-        public void UpdateStatus(OrderStatus newStatus)
-        {
-            Status = newStatus;
-            UpdatedAt = DateTime.UtcNow;
-        }
     }
 }

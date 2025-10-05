@@ -134,7 +134,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "RestaurantOrderSystem.Models.Table",
+        "Type": "RestaurantOrderSystem.Models.Order",
         "MediaTypes": [
           "text/plain",
           "application/json",

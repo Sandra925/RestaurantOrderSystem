@@ -11,7 +11,7 @@
     <form method="post" asp-page="/Order" asp-page-handler="AddOrder">
             <input type="hidden" name="tableId" value="@Model.Table.Id" />
             <label>Customer Count</label>
-            <input type="number" required />
+            <input type="number" name="customerNum" required />
             <button type="submit" class="btn-primary">Make an Order</button>
     </form>
         

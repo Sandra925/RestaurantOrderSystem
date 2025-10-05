@@ -1,16 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantOrderSystem.Models;
+
 
 namespace RestaurantOrderSystem.Pages
 {
     public class OrderModel : PageModel
     {
         private readonly HttpClient _httpClient;
-        public OrderModel(HttpClient httpClient)
+        public OrderModel(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClient;
+            _httpClient = httpClientFactory.CreateClient("ApiClient");
         }
         public List<Order> Orders { get; set; } = new List<Order>();
         public Order Order { get; set; } = new Order();
@@ -35,6 +35,7 @@ namespace RestaurantOrderSystem.Pages
                 CustomerCount = customerNum,
                 Status = OrderStatus.Pending
             };
+            Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(order));
             var response = await _httpClient.PostAsJsonAsync("api/orders", order);
 
             if (response.IsSuccessStatusCode)
@@ -45,6 +46,7 @@ namespace RestaurantOrderSystem.Pages
             else
             {
                 var errorContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(errorContent);
                 return Page();
             }
 

@@ -43,7 +43,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // POST: api/orders
         [HttpPost]
-        public async Task<ActionResult<Table>> PostOrder(Order order)
+        public async Task<ActionResult<Order>> PostOrder([FromBody] Order order)
         {
             if (order == null)
             {
@@ -53,22 +53,11 @@ namespace RestaurantOrderSystem.Controllers
             {
                 return UnprocessableEntity(ModelState);
             }
-            if (order.Id == 0)
-            {
-                var random = new Random();
-                int id;
-                do
-                {
-                    id = random.Next(1, 20);
-                } while (await _context.Orders.AnyAsync(t => t.Id == id));
-
-                order.Id = id;
-            }
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTable", new { id = order.Id }, order);
+            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
         }
 
         //DELETE: api/items/deleteOrder/id
