@@ -13,6 +13,7 @@ namespace RestaurantOrderSystem.Pages
             _httpClient = httpClientFactory.CreateClient("ApiClient");
         }
         public List<Order> Orders { get; set; } = new List<Order>();
+        public List<Item> Items { get; set; } = new List<Item>();
         public Order Order { get; set; } = new Order();
 
         public async Task OnGetAsync(int id)
@@ -20,6 +21,7 @@ namespace RestaurantOrderSystem.Pages
             try
             {
                 Order = await _httpClient.GetFromJsonAsync<Order>($"api/orders/{id}");
+                Items = await _httpClient.GetFromJsonAsync<List<Item>>($"api/items");
             }
             catch(Exception ex)
             {
