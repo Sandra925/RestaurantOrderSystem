@@ -7,6 +7,7 @@ namespace RestaurantOrderSystem.Pages
     public class TableModel : PageModel
     {
         private readonly HttpClient _httpClient;
+        [BindProperty]
         public Table Table { get; set; } = new Table();
         public Order? CurrentOrder { get; set; }
 

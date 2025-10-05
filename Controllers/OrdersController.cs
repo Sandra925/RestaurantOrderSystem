@@ -46,18 +46,19 @@ namespace RestaurantOrderSystem.Controllers
         public async Task<ActionResult<Order>> PostOrder([FromBody] Order order)
         {
             if (order == null)
-            {
                 return BadRequest("Payload is null");
-            }
+
             if (!ModelState.IsValid)
-            {
                 return UnprocessableEntity(ModelState);
-            }
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetOrder", new { id = order.Id }, order);
+            var createdOrder = await _context.Orders
+                .Include(o => o.Table)
+                .FirstOrDefaultAsync(o => o.Id == order.Id);
+
+            return Ok(createdOrder);
         }
 
         //DELETE: api/items/deleteOrder/id

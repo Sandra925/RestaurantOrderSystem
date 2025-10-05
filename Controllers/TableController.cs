@@ -32,7 +32,9 @@ namespace RestaurantOrderSystem.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Table>> GetTable(int id)
         {
-            var table = await _context.Tables.FindAsync(id);
+            var table = await _context.Tables.Include(t => t.Orders)
+                .ThenInclude(o => o.OrderItems)
+                .FirstOrDefaultAsync(t => t.Id == id);
 
             if (table == null)
             {

@@ -4,7 +4,7 @@
 @model RestaurantOrderSystem.Pages.OrderModel
 @{
     <label>Order Id: @Model.Order.Id</label>
-    List<Item> items = Model.Items.ToList();
+    List<Item> items = @Model.Items.ToList();
     <label>Choose Items to add to your order</label>
     @foreach (Item item in items)
     {

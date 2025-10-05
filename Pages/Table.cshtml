@@ -8,12 +8,20 @@
         <p>Row: @Model.Table.Row, Col: @Model.Table.Col</p>
     </div>
     <div class="activate-table-container">
-    <form method="post" asp-page="/Order" asp-page-handler="AddOrder">
-            <input type="hidden" name="tableId" value="@Model.Table.Id" />
-            <label>Customer Count</label>
-            <input type="number" name="customerNum" required />
-            <button type="submit" class="btn-primary">Make an Order</button>
-    </form>
+        @if (Model.Table.CurrentOrder != null)
+        {
+            <a asp-page="/Order" asp-route-id="@Model.Table.CurrentOrder.Id" class="btn btn-primary">Open Current Order</a>
+        }
+        else
+        {
+            <form method="post" asp-page="/Order" asp-page-handler="AddOrder">
+                <input type="hidden" name="tableId" value="@Model.Table.Id" />
+                <label>Customer Count</label>
+                <input type="number" name="customerNum" required />
+                <button type="submit" class="btn-primary">Make an Order</button>
+            </form>
+        }
+        
         
     </div>
     

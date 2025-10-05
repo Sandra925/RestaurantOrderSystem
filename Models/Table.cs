@@ -38,18 +38,17 @@ namespace RestaurantOrderSystem.Models
         [BindProperty]
         public TableStatus Status { get; set; }
 
-        // Navigation property
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
-        // Helper property for current active order
         [NotMapped]
         public Order? CurrentOrder => Orders?.FirstOrDefault(o => o.Status != OrderStatus.Completed && o.Status != OrderStatus.Cancelled);
     }
 
     public enum OrderStatus
     {
+
         Pending,
-        Confirmed,
+        Open,
         InProgress,
         Ready,
         Served,

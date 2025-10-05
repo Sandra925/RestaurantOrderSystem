@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RestaurantOrderSystem.Models;
 
 
@@ -23,7 +24,7 @@ namespace RestaurantOrderSystem.Pages
                 Order = await _httpClient.GetFromJsonAsync<Order>($"api/orders/{id}");
                 Items = await _httpClient.GetFromJsonAsync<List<Item>>($"api/items");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Order Order = new Order();
             }
@@ -35,7 +36,7 @@ namespace RestaurantOrderSystem.Pages
                 CreatedAt = DateTime.Now.Date,
                 TableId = tableId,
                 CustomerCount = customerNum,
-                Status = OrderStatus.Pending
+                Status = OrderStatus.Open
             };
             Console.WriteLine(System.Text.Json.JsonSerializer.Serialize(order));
             var response = await _httpClient.PostAsJsonAsync("api/orders", order);
@@ -43,7 +44,7 @@ namespace RestaurantOrderSystem.Pages
             if (response.IsSuccessStatusCode)
             {
                 Order = await response.Content.ReadFromJsonAsync<Order>();
-                return RedirectToPage(new {id = Order.Id});
+                return RedirectToPage(new { id = Order.Id });
             }
             else
             {
@@ -53,5 +54,6 @@ namespace RestaurantOrderSystem.Pages
             }
 
         }
+      
     }
 }
