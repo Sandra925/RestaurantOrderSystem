@@ -38,7 +38,7 @@ namespace RestaurantOrderSystem.Controllers
                 return NotFound();
             }
 
-            return order;
+            return Ok(order);
         }
 
         // POST: api/orders
@@ -58,11 +58,11 @@ namespace RestaurantOrderSystem.Controllers
                 .Include(o => o.Table)
                 .FirstOrDefaultAsync(o => o.Id == order.Id);
 
-            return Ok(createdOrder);
+            return CreatedAtAction("GetOrder", new { id = order.Id }, createdOrder);
         }
 
-        //DELETE: api/items/deleteOrder/id
-        [HttpDelete("deleteOrder/{id}")]
+        //DELETE: api/orders/id
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);

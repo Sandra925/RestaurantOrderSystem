@@ -63,6 +63,22 @@
   },
   {
     "ContainingType": "RestaurantOrderSystem.Controllers.ItemsController",
+    "Method": "DeleteItem",
+    "RelativePath": "api/Items/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.ItemsController",
     "Method": "UpdateItem",
     "RelativePath": "api/Items/{id}",
     "HttpMethod": "PUT",
@@ -77,22 +93,6 @@
       {
         "Name": "updatedItem",
         "Type": "RestaurantOrderSystem.Models.Item",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RestaurantOrderSystem.Controllers.ItemsController",
-    "Method": "DeleteItem",
-    "RelativePath": "api/Items/deleteItem/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -182,6 +182,22 @@
   },
   {
     "ContainingType": "RestaurantOrderSystem.Controllers.OrdersController",
+    "Method": "DeleteOrder",
+    "RelativePath": "api/Orders/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrdersController",
     "Method": "UpdateOrder",
     "RelativePath": "api/Orders/{id}",
     "HttpMethod": "PUT",
@@ -196,22 +212,6 @@
       {
         "Name": "updatedOrder",
         "Type": "RestaurantOrderSystem.Models.Order",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "RestaurantOrderSystem.Controllers.OrdersController",
-    "Method": "DeleteOrder",
-    "RelativePath": "api/Orders/deleteOrder/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
         "IsRequired": true
       }
     ],
@@ -323,7 +323,7 @@
   {
     "ContainingType": "RestaurantOrderSystem.Controllers.TablesController",
     "Method": "DeleteTableByPosition",
-    "RelativePath": "api/Tables/byposition/{row}/{col}",
+    "RelativePath": "api/Tables/{row}/{col}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -335,6 +335,301 @@
       },
       {
         "Name": "col",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.TableOrdersController",
+    "Method": "GetOrdersForTable",
+    "RelativePath": "api/tables/{tableId}/orders",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RestaurantOrderSystem.Models.Order, RestaurantOrderSystem, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.TableOrdersController",
+    "Method": "CreateOrder",
+    "RelativePath": "api/tables/{tableId}/orders",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "order",
+        "Type": "RestaurantOrderSystem.Models.Order",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RestaurantOrderSystem.Models.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.TableOrdersController",
+    "Method": "GetOrder",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RestaurantOrderSystem.Models.Order",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.TableOrdersController",
+    "Method": "UpdateOrder",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "updatedOrder",
+        "Type": "RestaurantOrderSystem.Models.Order",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.TableOrdersController",
+    "Method": "DeleteOrder",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrderItemsController",
+    "Method": "GetOrderItems",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}/items",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[RestaurantOrderSystem.Models.OrderItem, RestaurantOrderSystem, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrderItemsController",
+    "Method": "AddItemToOrder",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}/items",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "RestaurantOrderSystem.Controllers.AddItemToOrderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RestaurantOrderSystem.Models.OrderItem",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrderItemsController",
+    "Method": "GetOrderItem",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}/items/{orderItemId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderItemId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "RestaurantOrderSystem.Models.OrderItem",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrderItemsController",
+    "Method": "UpdateOrderItem",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}/items/{orderItemId}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderItemId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "RestaurantOrderSystem.Controllers.UpdateOrderItemRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "RestaurantOrderSystem.Controllers.OrderItemsController",
+    "Method": "RemoveItemFromOrder",
+    "RelativePath": "api/tables/{tableId}/orders/{orderId}/items/{orderItemId}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tableId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderItemId",
         "Type": "System.Int32",
         "IsRequired": true
       }

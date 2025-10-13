@@ -51,8 +51,8 @@ namespace RestaurantOrderSystem.Controllers
             return item;
         }
 
-        //DELETE: api/items/deleteItem/id
-        [HttpDelete("deleteItem/{id}")]
+        //DELETE: api/items/id
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteItem(int id)
         {
             var item = await _context.Items.FirstOrDefaultAsync(i => i.Id == id);

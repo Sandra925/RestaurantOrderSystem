@@ -74,8 +74,8 @@ namespace RestaurantOrderSystem.Controllers
             return CreatedAtAction("GetTable", new { id = table.Id }, table);
         }
 
-        // DELETE: api/tables/byposition/1/2
-        [HttpDelete("byposition/{row}/{col}")]
+        // DELETE: api/tables/1/2
+        [HttpDelete("{row}/{col}")]
         public async Task<IActionResult> DeleteTableByPosition(int row, int col)
         {
             var table = await _context.Tables.FirstOrDefaultAsync(t => t.Row == row && t.Col == col);
@@ -94,6 +94,10 @@ namespace RestaurantOrderSystem.Controllers
         public async Task<IActionResult> DeleteTables()
         {
             List<Table> tables = await _context.Tables.ToListAsync();
+            if(tables == null)
+            {
+                return NotFound();
+            }
             foreach (Table table in tables)
             {
                 _context.Tables.Remove(table);

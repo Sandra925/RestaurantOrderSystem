@@ -53,7 +53,7 @@ namespace RestaurantOrderSystem.Pages
 
         public async Task<IActionResult> OnPostDeleteTable(int row, int col)
         {
-            var response = await _httpClient.DeleteAsync($"api/tables/byposition/{row}/{col}");
+            var response = await _httpClient.DeleteAsync($"api/tables/{row}/{col}");
 
             if (response.IsSuccessStatusCode)
             {

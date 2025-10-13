@@ -52,8 +52,36 @@ namespace RestaurantOrderSystem.Pages
                 Console.WriteLine(errorContent);
                 return Page();
             }
-
         }
-      
+        public async Task<IActionResult> OnPostAddItemsToOrder(int itemID, int orderID, int tableID)
+        {
+            try
+            {
+                var itemData = new
+                {
+                    ItemId = itemID,
+                    Quantity = 1
+                };
+                var response = await _httpClient.PostAsJsonAsync($"api/tables/{tableID}/orders/{orderID}/items", itemData);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Order = await _httpClient.GetFromJsonAsync<Order>($"api/orders/{orderID}");
+                    return RedirectToPage(new { id = orderID });
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine(error);
+                    return Page();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding item {ex.Message}");
+                return Page();
+
+            }
+        }
     }
 }
