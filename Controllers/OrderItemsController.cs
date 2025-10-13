@@ -22,14 +22,12 @@ namespace RestaurantOrderSystem.Controllers
         {
             try
             {
-                // Check if table exists
                 var tableExists = await _context.Tables.AnyAsync(t => t.Id == tableId);
                 if (!tableExists)
                 {
                     return NotFound(new { message = $"Table with ID {tableId} not found" });
                 }
 
-                // Check if order exists and belongs to table
                 var orderExists = await _context.Orders.AnyAsync(o => o.Id == orderId && o.TableId == tableId);
                 if (!orderExists)
                 {
@@ -58,14 +56,12 @@ namespace RestaurantOrderSystem.Controllers
                 if (request == null)
                     return BadRequest(new { message = "Request payload is null" });
 
-                // Check if table exists
                 var table = await _context.Tables.FindAsync(tableId);
                 if (table == null)
                 {
                     return NotFound(new { message = $"Table with ID {tableId} not found" });
                 }
 
-                // Check if order exists and belongs to table
                 var order = await _context.Orders
                     .FirstOrDefaultAsync(o => o.Id == orderId && o.TableId == tableId);
                 if (order == null)
@@ -73,30 +69,25 @@ namespace RestaurantOrderSystem.Controllers
                     return NotFound(new { message = $"Order with ID {orderId} not found for table {tableId}" });
                 }
 
-                // Check if item exists
                 var item = await _context.Items.FindAsync(request.ItemId);
                 if (item == null)
                 {
                     return NotFound(new { message = $"Item with ID {request.ItemId} not found" });
                 }
 
-                // Validate quantity
                 if (request.Quantity <= 0)
                 {
                     return BadRequest(new { message = "Quantity must be greater than 0" });
                 }
 
-                // Check if item already exists in order
                 var existingOrderItem = await _context.OrderItems
                     .FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ItemId == request.ItemId);
 
                 if (existingOrderItem != null)
                 {
-                    // Update quantity if item already exists in order
                     existingOrderItem.Quantity += request.Quantity;
                     await _context.SaveChangesAsync();
 
-                    // Reload the item details
                     await _context.Entry(existingOrderItem)
                         .Reference(oi => oi.Item)
                         .LoadAsync();
@@ -105,7 +96,6 @@ namespace RestaurantOrderSystem.Controllers
                 }
                 else
                 {
-                    // Create new order item
                     var orderItem = new OrderItem
                     {
                         OrderId = orderId,
@@ -116,7 +106,6 @@ namespace RestaurantOrderSystem.Controllers
                     _context.OrderItems.Add(orderItem);
                     await _context.SaveChangesAsync();
 
-                    // Load the item details for response
                     await _context.Entry(orderItem)
                         .Reference(oi => oi.Item)
                         .LoadAsync();
@@ -143,14 +132,12 @@ namespace RestaurantOrderSystem.Controllers
         {
             try
             {
-                // Check if table exists
                 var tableExists = await _context.Tables.AnyAsync(t => t.Id == tableId);
                 if (!tableExists)
                 {
                     return NotFound(new { message = $"Table with ID {tableId} not found" });
                 }
 
-                // Check if order exists and belongs to table
                 var orderExists = await _context.Orders.AnyAsync(o => o.Id == orderId && o.TableId == tableId);
                 if (!orderExists)
                 {
@@ -180,14 +167,12 @@ namespace RestaurantOrderSystem.Controllers
         {
             try
             {
-                // Check if table exists
                 var tableExists = await _context.Tables.AnyAsync(t => t.Id == tableId);
                 if (!tableExists)
                 {
                     return NotFound(new { message = $"Table with ID {tableId} not found" });
                 }
 
-                // Check if order exists and belongs to table
                 var orderExists = await _context.Orders.AnyAsync(o => o.Id == orderId && o.TableId == tableId);
                 if (!orderExists)
                 {
@@ -202,18 +187,15 @@ namespace RestaurantOrderSystem.Controllers
                     return NotFound(new { message = $"Order item with ID {orderItemId} not found in order {orderId}" });
                 }
 
-                // Validate quantity
                 if (request.Quantity <= 0)
                 {
                     return BadRequest(new { message = "Quantity must be greater than 0" });
                 }
 
-                // Update properties
                 orderItem.Quantity = request.Quantity;
 
                 await _context.SaveChangesAsync();
 
-                // Reload the item details
                 await _context.Entry(orderItem)
                     .Reference(oi => oi.Item)
                     .LoadAsync();
@@ -232,14 +214,12 @@ namespace RestaurantOrderSystem.Controllers
         {
             try
             {
-                // Check if table exists
                 var tableExists = await _context.Tables.AnyAsync(t => t.Id == tableId);
                 if (!tableExists)
                 {
                     return NotFound(new { message = $"Table with ID {tableId} not found" });
                 }
 
-                // Check if order exists and belongs to table
                 var orderExists = await _context.Orders.AnyAsync(o => o.Id == orderId && o.TableId == tableId);
                 if (!orderExists)
                 {

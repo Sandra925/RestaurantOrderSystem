@@ -36,8 +36,6 @@ namespace RestaurantOrderSystem.Models
         [Range(1, 20)]
         public int CustomerCount { get; set; }
 
-        public decimal? TotalAmount => OrderItems?.Sum(oi => oi.Quantity * oi.Item.Price) ?? 0;
-
         [Required]
         public int TableId { get; set; }
 
