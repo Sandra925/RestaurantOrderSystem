@@ -38,7 +38,7 @@ namespace RestaurantOrderSystem.Pages
         public async Task<IActionResult> OnPostDeleteItem(int id)
         {
 
-            var response = await _httpClient.DeleteAsync($"api/items/deleteItem/{id}");
+            var response = await _httpClient.DeleteAsync($"api/items/{id}");
             if (response.IsSuccessStatusCode)
             {
                 return RedirectToPage();

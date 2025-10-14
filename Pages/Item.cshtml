@@ -1,37 +1,121 @@
 ﻿@page
 @using RestaurantOrderSystem.Models
 @model RestaurantOrderSystem.Pages.ItemModel
-@{
-    <form method="post" asp-page-handler="AddItem">
-        <label>Name</label>
-        <input name="name"/>
-        <label>Price</label>
-        <input name="price" />
-        <button type="submit">Add Item</button>
-    </form>
-    <form method="post" asp-page-handler="DeleteItem">
-        <label>Item ID:</label>
-        <input type="number" name="id" />
-        <button type="submit">Delete Item</button>
-    </form>
-    <form method="post" asp-page-handler="UpdateItem">
-        <label>ItemID:</label>
-        <input type="number" name="id" />
-        <label>Name</label>
-        <input name="name"/>
-        <label>Price</label>
-        <input name="price" />
-        <button type="submit">Update Item</button>
-    
-    </form>
-    List<Item> items = Model.Items;
-    @foreach(Item item in items)
-    {
-        <table class="row">
-            <td>@item.Id</td>
-            <td>@item.Name</td>
-            <td>@item.Price</td>
-        </table>
-    }
 
-}
+<div class="container mt-4">
+    <h2>Item Management</h2>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Add Item</h5>
+                </div>
+                <div class="card-body management">
+                    <form method="post" asp-page-handler="AddItem">
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input name="name" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input name="price" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Add Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Delete Item</h5>
+                </div>
+                <div class="card-body management">
+                    <form method="post" asp-page-handler="DeleteItem">
+                        <div class="mb-3">
+                            <label class="form-label">Item ID</label>
+                            <input type="number" name="id" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-danger w-100">Delete Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5>Update Item</h5>
+                </div>
+                <div class="card-body management">
+                    <form method="post" asp-page-handler="UpdateItem">
+                        <div class="mb-3">
+                            <label class="form-label">Item ID</label>
+                            <input type="number" name="id" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Name</label>
+                            <input name="name" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input name="price" class="form-control" />
+                        </div>
+                        <button type="submit" class="btn btn-warning w-100">Update Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mt-4">
+        <div class="card-header">
+            <h5>Items</h5>
+        </div>
+        <div class="card-body">
+            @if (Model.Items.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>@item.Id</td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Price</td>
+                                    <td>
+                                        <form method="post" asp-page-handler="DeleteItem">
+                                            <input type="hidden" name="id" value="@item.Id" />
+                                            <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">No items yet.</p>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    .card-body.management{
+        height: 350px;
+    }
+</style>
