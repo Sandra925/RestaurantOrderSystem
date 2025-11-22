@@ -17,61 +17,73 @@ build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = RestaurantOrderSystem
 build_property.RootNamespace = RestaurantOrderSystem
-build_property.ProjectDir = C:\Users\K203082\Desktop\ktu\7 semestras\saitynai\RestoranoSistema\RestoranoSistema\
+build_property.ProjectDir = C:\Users\K203082\Desktop\ktu\7semestras\saitynai\RestoranoSistema\RestoranoSistema\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 9.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\K203082\Desktop\ktu\7 semestras\saitynai\RestoranoSistema\RestoranoSistema
+build_property.MSBuildProjectDirectory = C:\Users\K203082\Desktop\ktu\7semestras\saitynai\RestoranoSistema\RestoranoSistema
 build_property._RazorSourceGeneratorDebug = 
 build_property.EffectiveAnalysisLevelStyle = 9.0
 build_property.EnableCodeStyleSeverity = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Error.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Admin.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcQWRtaW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcRXJyb3IuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Hall.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Hall.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSGFsbC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Index.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Item.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Item.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcSXRlbS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Kitchencshtml.cshtml]
-build_metadata.AdditionalFiles.TargetPath = UGFnZXNcS2l0Y2hlbmNzaHRtbC5jc2h0bWw=
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Kitchen.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcS2l0Y2hlbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Order.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcTG9naW4uY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Order.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcT3JkZXIuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Privacy.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcUHJpdmFjeS5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Table.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/SignUp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2lnblVwLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Table.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcVGFibGUuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/_ViewImports.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/_ViewStart.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/K203082/Desktop/ktu/7 semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Shared/_Layout.cshtml]
+[C:/Users/K203082/Desktop/ktu/7semestras/saitynai/RestoranoSistema/RestoranoSistema/Pages/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = UGFnZXNcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-eihzzfdte8

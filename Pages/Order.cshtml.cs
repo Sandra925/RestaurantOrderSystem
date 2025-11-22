@@ -24,17 +24,14 @@ namespace RestaurantOrderSystem.Pages
             {
                 Console.WriteLine($"Loading order with ID: {id}");
 
-                // Get order details
                 Order = await _httpClient.GetFromJsonAsync<Order>($"api/orders/{id}");
                 Console.WriteLine($"Order loaded: {Order?.Id}, Table: {Order?.TableId}");
 
                 if (Order != null)
                 {
-                    // Get available items
                     Items = await _httpClient.GetFromJsonAsync<List<Item>>("api/items") ?? new List<Item>();
                     Console.WriteLine($"Available items loaded: {Items.Count}");
 
-                    // Get order items for this order
                     await LoadOrderItems(Order.TableId, Order.Id);
                 }
             }

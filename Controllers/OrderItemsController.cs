@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantOrderSystem.Data;
 using RestaurantOrderSystem.Models;
@@ -7,6 +8,7 @@ namespace RestaurantOrderSystem.Controllers
 {
     [ApiController]
     [Route("api/tables/{tableId}/orders/{orderId}/items")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class OrderItemsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -18,6 +20,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/tables/{tableId}/orders/{orderId}/items
         [HttpGet]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<IEnumerable<OrderItem>>> GetOrderItems(int tableId, int orderId)
         {
             try
@@ -49,6 +52,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // POST: api/tables/{tableId}/orders/{orderId}/items
         [HttpPost]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<ActionResult<OrderItem>> AddItemToOrder(int tableId, int orderId, [FromBody] AddItemToOrderRequest request)
         {
             try
@@ -128,6 +132,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/tables/{tableId}/orders/{orderId}/items/{orderItemId}
         [HttpGet("{orderItemId}")]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<OrderItem>> GetOrderItem(int tableId, int orderId, int orderItemId)
         {
             try
@@ -163,6 +168,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // PUT: api/tables/{tableId}/orders/{orderId}/items/{orderItemId}
         [HttpPut("{orderItemId}")]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<IActionResult> UpdateOrderItem(int tableId, int orderId, int orderItemId, [FromBody] UpdateOrderItemRequest request)
         {
             try
@@ -210,6 +216,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // DELETE: api/tables/{tableId}/orders/{orderId}/items/{orderItemId}
         [HttpDelete("{orderItemId}")]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<IActionResult> RemoveItemFromOrder(int tableId, int orderId, int orderItemId)
         {
             try

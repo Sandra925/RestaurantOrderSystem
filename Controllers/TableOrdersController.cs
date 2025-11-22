@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantOrderSystem.Data;
 using RestaurantOrderSystem.Models;
@@ -7,6 +8,7 @@ namespace RestaurantOrderSystem.Controllers
 {
     [ApiController]
     [Route("api/tables/{tableId}/orders")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class TableOrdersController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -17,6 +19,7 @@ namespace RestaurantOrderSystem.Controllers
         }
         // GET: api/tables/{tableId}/orders
         [HttpGet]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrdersForTable(int tableId)
         {
             var table = await _context.Tables.FindAsync(tableId);
@@ -34,6 +37,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/tables/{tableId}/orders/{orderId}
         [HttpGet("{orderId}")]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<Order>> GetOrder(int tableId, int orderId)
         {
             var table = await _context.Tables.FindAsync(tableId);
@@ -52,6 +56,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // POST: api/tables/{tableId}/orders
         [HttpPost]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<ActionResult<Order>> CreateOrder(int tableId, [FromBody] Order order)
         {
             if (order == null)
@@ -81,6 +86,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // PUT: api/tables/{tableId}/orders/{orderId}
         [HttpPut("{orderId}")]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<IActionResult> UpdateOrder(int tableId, int orderId, [FromBody] Order updatedOrder)
         {
             if (orderId != updatedOrder.Id)
@@ -108,6 +114,7 @@ namespace RestaurantOrderSystem.Controllers
         // DELETE: api/tables/{tableId}/orders/{orderId}
 
         [HttpDelete("{orderId}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteOrder(int tableId, int orderId)
         {
             var table = await _context.Tables.FindAsync(tableId);

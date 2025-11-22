@@ -1,0 +1,46 @@
+﻿@page
+@model RestaurantOrderSystem.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="text-center">Login</h2>
+                </div>
+                <div class="card-body">
+                    <!-- Vietinis prisijungimas -->
+                    <form method="post">
+                        <div class="form-group mb-3">
+                            <label asp-for="LoginInput.Username" class="form-label">Username</label>
+                            <input asp-for="LoginInput.Username" class="form-control" />
+                            <span asp-validation-for="LoginInput.Username" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label asp-for="LoginInput.Password" class="form-label">Password</label>
+                            <input type="password" asp-for="LoginInput.Password" class="form-control" />
+                            <span asp-validation-for="LoginInput.Password" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                    </form>
+
+                    <!-- Google OAuth2 prisijungimas -->
+                    <form method="post">
+                        <button type="submit" asp-page-handler="Google" class="btn btn-outline-danger w-100">
+                            Login with Google
+                        </button>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <a href="/SignUp">Don't have an account? Sign up</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

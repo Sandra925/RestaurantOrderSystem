@@ -1,54 +1,72 @@
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using RestaurantOrderSystem.Models;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
 
 namespace RestaurantOrderSystem.Pages
 {
+    [Authorize(Policy = "StaffOnly")]
     public class HallModel : PageModel
     {
         private readonly HttpClient _httpClient;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public HallModel(IHttpClientFactory httpClientFactory)
+        public HallModel(IHttpClientFactory httpClientFactory, IHttpContextAccessor httpContextAccessor)
         {
             _httpClient = httpClientFactory.CreateClient("ApiClient");
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public List<Table> Tables { get; set; } = new List<Table>();
         public async Task OnGetAsync()
         {
-            try
-            {
-                Tables = await _httpClient.GetFromJsonAsync<List<Table>>("/api/tables");
-            }
-            catch (Exception ex)
-            {
-                Tables = new List<Table>();
-            }
+            var response = await _httpClient.GetAsync("/api/tables");
+                Console.WriteLine($"API Response Status: {response.StatusCode}"); // Debug log
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Tables = await response.Content.ReadFromJsonAsync<List<Table>>();
+                    Console.WriteLine($"Loaded {Tables?.Count ?? 0} tables"); // Debug log
+                }
         }
+        
 
         public async Task<IActionResult> OnPostAddTable(int row, int col, int num)
         {
-            var table = new Table
+            try
             {
-                Row = row,
-                Col = col,
-                Number = num,
-                Status = TableStatus.Available
-            };
+                var table = new Table
+                {
+                    Row = row,
+                    Col = col,
+                    Number = num,
+                    Status = TableStatus.Available
+                };
 
-            var response = await _httpClient.PostAsJsonAsync("api/tables", table);
+                var response = await _httpClient.PostAsJsonAsync("api/tables", table);
 
-            if (response.IsSuccessStatusCode)
-            {
-                return RedirectToPage();
+                if (response.IsSuccessStatusCode)
+                {
+                    return RedirectToPage();
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Error adding table: {errorContent}");
+                    TempData["Error"] = "Failed to add table";
+                }
             }
-            else
+            catch (Exception ex)
             {
-                var errorContent = await response.Content.ReadAsStringAsync();
-                return Page();
+                Console.WriteLine($"Exception: {ex.Message}");
+                TempData["Error"] = "Error occurred while adding table";
             }
+
+            return Page();
         }
 
         public async Task<IActionResult> OnPostDeleteTable(int row, int col)

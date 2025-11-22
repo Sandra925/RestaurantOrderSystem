@@ -4,6 +4,7 @@
 @{
     <h6>Create Table</h6>
     <form method="post" asp-page-handler="AddTable">
+    @Html.AntiForgeryToken()
         <label>Row</label>
         <input type="number" name ="row" class="add-table-row" />
         <label>Column</label>
@@ -14,6 +15,7 @@
     </form>
     <h6>Delete Table</h6>
     <form method="post" asp-page-handler="DeleteTable">
+        @Html.AntiForgeryToken()
         <label>Row</label>
         <input type="number" name="row" class="delete-table-row" />
         <label>Column</label>
@@ -22,9 +24,11 @@
     </form>
     <h6>Delete Tables</h6>
     <form method="post" asp-page-handler="DeleteTables">
+        @Html.AntiForgeryToken()
         <button type="submit">Delete All Tables</button>
     </form>
     <h6>Update Table</h6>
+    @Html.AntiForgeryToken()
     <form method="post" asp-page-handler="UpdateTable">
         <label>Table ID</label>
         <input type="number" name="id"/>

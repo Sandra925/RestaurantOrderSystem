@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RestaurantOrderSystem.Models;
 
 namespace RestaurantOrderSystem.Pages
 {
+    [Authorize(Policy ="AdminOnly")]
     public class ItemModel : PageModel
     {
         private readonly HttpClient _httpClient;

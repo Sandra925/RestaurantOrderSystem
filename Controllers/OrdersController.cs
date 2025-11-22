@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestaurantOrderSystem.Data;
 using RestaurantOrderSystem.Models;
@@ -7,6 +8,7 @@ namespace RestaurantOrderSystem.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class OrdersController : ControllerBase
     {
        private readonly AppDbContext _context;
@@ -17,6 +19,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/orders
         [HttpGet]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             List<Order> orders = await _context.Orders.ToListAsync();
@@ -29,6 +32,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/orders/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<Order>> GetOrder(int id)
         {
             var order = await _context.Orders.FindAsync(id);
@@ -43,6 +47,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // POST: api/orders
         [HttpPost]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<ActionResult<Order>> PostOrder([FromBody] Order order)
         {
             if (order == null)
@@ -63,6 +68,7 @@ namespace RestaurantOrderSystem.Controllers
 
         //DELETE: api/orders/id
         [HttpDelete("{id}")]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteOrder(int id)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == id);
@@ -77,6 +83,7 @@ namespace RestaurantOrderSystem.Controllers
 
         //DELETE: api/orders
         [HttpDelete]
+        [Authorize(Policy = "AdminOnly")]
         public async Task<IActionResult> DeleteTables()
         {
             List<Order> orders = await _context.Orders.ToListAsync();
@@ -90,6 +97,7 @@ namespace RestaurantOrderSystem.Controllers
 
         //PUT: api/items/id
         [HttpPut("{id}")]
+        [Authorize(Policy = "CanCreateOrders")]
         public async Task<IActionResult> UpdateOrder(int id, [FromBody] Order updatedOrder)
         {
             if (id != updatedOrder.Id)
@@ -106,6 +114,55 @@ namespace RestaurantOrderSystem.Controllers
             return Ok(order);
         }
 
+        [HttpPatch("{id}/status")]
+        [Authorize(Policy = "CanUpdateOrderStatus")]
+        public async Task<IActionResult> UpdateOrderStatus(int id, [FromBody] OrderStatusUpdateRequest request)
+        {
+            try
+            {
+                var order = await _context.Orders
+                    .Include(o => o.OrderItems)
+                    .ThenInclude(oi => oi.Item)
+                    .FirstOrDefaultAsync(o => o.Id == id);
+
+                if (order == null)
+                    return NotFound(new { message = "Order not found" });
+
+                order.Status = request.Status;
+                order.UpdatedAt = DateTime.UtcNow;
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Order status updated successfully",
+                    order = new
+                    {
+                        order.Id,
+                        order.TableId,
+                        order.Status,
+                        order.CustomerCount,
+                        order.CreatedAt,
+                        order.UpdatedAt,
+                        OrderItems = order.OrderItems.Select(oi => new
+                        {
+                            oi.Id,
+                            oi.Quantity,
+                            Item = new { oi.Item.Id, oi.Item.Name, oi.Item.Price }
+                        })
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while updating order status", error = ex.Message });
+            }
+        }
+
+        public class OrderStatusUpdateRequest
+        {
+            public OrderStatus Status { get; set; }
+        }
 
     }
 }

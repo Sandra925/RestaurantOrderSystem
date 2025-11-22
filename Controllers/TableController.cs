@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RestaurantOrderSystem.Models;
-using RestaurantOrderSystem.Data;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using RestaurantOrderSystem.Data;
+using RestaurantOrderSystem.Models;
 
 namespace RestaurantOrderSystem.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class TablesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -18,6 +21,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/tables
         [HttpGet]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<IEnumerable<Table>>> GetTables()
         {
             List<Table> tables = await _context.Tables.ToListAsync();
@@ -30,6 +34,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // GET: api/tables/5
         [HttpGet("{id}")]
+        [Authorize(Policy = "StaffOnly")]
         public async Task<ActionResult<Table>> GetTable(int id)
         {
             var table = await _context.Tables.Include(t => t.Orders)
@@ -46,6 +51,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // POST: api/tables
         [HttpPost]
+        [Authorize(Policy = "CanManageTables")]
         public async Task<ActionResult<Table>> PostTable(Table table)
         {
             if(table == null)
@@ -76,6 +82,7 @@ namespace RestaurantOrderSystem.Controllers
 
         // DELETE: api/tables/1/2
         [HttpDelete("{row}/{col}")]
+        [Authorize(Policy = "CanManageTables")]
         public async Task<IActionResult> DeleteTableByPosition(int row, int col)
         {
             var table = await _context.Tables.FirstOrDefaultAsync(t => t.Row == row && t.Col == col);
@@ -91,6 +98,7 @@ namespace RestaurantOrderSystem.Controllers
         }
         //DELETE: api/tables
         [HttpDelete]
+        [Authorize(Policy = "CanManageTables")]
         public async Task<IActionResult> DeleteTables()
         {
             List<Table> tables = await _context.Tables.ToListAsync();
@@ -108,6 +116,7 @@ namespace RestaurantOrderSystem.Controllers
 
         //PUT: api/tables/id
         [HttpPut("{id}")]
+        [Authorize(Policy = "CanManageTables")]
         public async Task<IActionResult> UpdateTable(int id, [FromBody] Table updatedTable)
         {
             if (id != updatedTable.Id)

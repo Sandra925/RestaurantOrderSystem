@@ -1,0 +1,17 @@
+# Ignore environment files
+.env
+*.env
+
+# Ignore build output
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.db
+*.sqlite
+*.swp
+*.suo
+
+# Ignore VS Code settings (optional)
+.vscode/
