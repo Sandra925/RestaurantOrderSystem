@@ -1,50 +1,201 @@
-html {
-  font-size: 14px;
+:root {
+    --cell-size-mobile: 36px;
+    --cell-size-desktop: 56px;
+    --accent: #258cfb;
 }
 
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
-}
-
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
-  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
-}
 
 html {
-  position: relative;
-  min-height: 100%;
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width:768px) {
+    html {
+        font-size: 16px;
+    }
 }
 
 body {
-  margin-bottom: 60px;
+    margin: 0 0 60px 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-.grid {
-    display: inline-block;
+
+/* Images responsive */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+
+/* Layout */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+
+/* Header specific styles */
+header {
+    background: linear-gradient(90deg, #ffffff, #f8fbff);
+    border-bottom: 1px solid #e6eefc;
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+}
+
+header .nav-link {
+    color: #1f2937;
+    padding: .5rem .75rem;
+    border-radius: 6px;
+}
+
+    header .nav-link:hover {
+        background: rgba(37,140,251,0.08);
+    }
+
+header .btn-header {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    padding: .4rem .7rem;
+    border-radius: 8px;
+}
+
+
+/* Content specific styles */
+main[role="main"] {
+    padding: 1rem 0;
+    background: #fff;
+}
+
+.grid-container {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
 }
 
 .grid-row {
     display: flex;
+    gap: .375rem;
 }
 
 .grid-cell {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #ccc;
+    width: var(--cell-size-mobile);
+    height: var(--cell-size-mobile);
+    border: 1px dashed #e2e8f0;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .table-cell {
-    background: lightblue;
-    width: 30px;
-    height: 30px;
+    background: #cfe9ff;
+    width: 100%;
+    height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 6px;
-    
+    font-weight: 600;
+}
+
+.empty-cell {
+    width: 100%;
+    height: 100%;
+}
+
+
+/* Footer specific styles */
+footer.footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #0b1220;
+    color: #cbd5e1;
+    padding: .75rem 0;
+    border-top: 4px solid rgba(37,140,251,0.12);
+}
+
+    footer .footer a {
+        color: #8fbafc;
+        text-decoration: none;
+        margin-left: .5rem;
+    }
+
+
+/* Analoginiai elementai skirtingose srityse: pavyzdys - .btn */
+.btn {
+    padding: .5rem .75rem;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+
+header .btn {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(37,140,251,0.18);
+}
+
+main .btn {
+    background: #fff;
+    color: var(--accent);
+    border: 1px solid #cfe9ff;
+}
+
+footer .btn {
+    background: transparent;
+    color: #cbd5e1;
+    border: 1px dashed rgba(203,213,225,0.12);
+}
+
+
+/* Focus outline (you already had) */
+.btn:focus, .form-control:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem var(--accent);
+    outline: none;
+}
+
+
+/* Responsive changes for grid */
+@media (min-width:768px) {
+    .grid-row {
+        gap: .5rem;
+    }
+
+    .grid-cell {
+        width: var(--cell-size-desktop);
+        height: var(--cell-size-desktop);
+    }
+
+    .grid-container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-bottom:100px;
+    }
+}
+
+
+/* Accessibility helpers */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
 }

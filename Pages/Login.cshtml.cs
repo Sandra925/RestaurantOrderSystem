@@ -75,10 +75,10 @@ namespace RestaurantOrderSystem.Pages
                     return LocalRedirect("/Kitchen");
 
                 case Role.Waiter:
-                    return LocalRedirect("/Bar");
+                    return LocalRedirect("/Hall");
 
                 case Role.Admin:
-                    return LocalRedirect("/Admin");
+                    return LocalRedirect("/Hall");
 
                 default:
                     return LocalRedirect("/Index");

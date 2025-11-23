@@ -1,79 +1,111 @@
 ﻿@page
 @using RestaurantOrderSystem.Models
 @model RestaurantOrderSystem.Pages.HallModel
-@{
-    <h6>Create Table</h6>
-    <form method="post" asp-page-handler="AddTable">
-    @Html.AntiForgeryToken()
-        <label>Row</label>
-        <input type="number" name ="row" class="add-table-row" />
-        <label>Column</label>
-        <input type="number" name ="col" class="add-table-col" />
-        <label>Number</label>
-        <input type="number" name="num" class="add-table-num" />       
-        <button type="submit">Add Table</button>
-    </form>
-    <h6>Delete Table</h6>
-    <form method="post" asp-page-handler="DeleteTable">
-        @Html.AntiForgeryToken()
-        <label>Row</label>
-        <input type="number" name="row" class="delete-table-row" />
-        <label>Column</label>
-        <input type="number" name="col" class="delete-table-col" />
-        <button type="submit">Delete Table</button>
-    </form>
-    <h6>Delete Tables</h6>
-    <form method="post" asp-page-handler="DeleteTables">
-        @Html.AntiForgeryToken()
-        <button type="submit">Delete All Tables</button>
-    </form>
-    <h6>Update Table</h6>
-    @Html.AntiForgeryToken()
-    <form method="post" asp-page-handler="UpdateTable">
-        <label>Table ID</label>
-        <input type="number" name="id"/>
 
-        <label>Row</label>
-        <input type="number" name="row" />
 
-        <label>Column</label>
-        <input type="number" name="col" />
+<link rel="stylesheet" href="~/css/hall.css" />
 
-        <label>Number</label>
-        <input type="number" name="num"/>
+<div class="hall-layout">
+    @if (User.IsInRole("Admin"))
+    {
+        <aside class="hall-controls">
 
-        <button type="submit">Update</button>
-    </form>
-  
-    <h3>Table Layout</h3>
-    <div class="grid-container">
-        @for (int row = 0; row < 10; row++)
-        {
-            <div class="grid-row">
-                @for (int col = 0; col < 10; col++)
-                {
-                    var hasTable = Model.Tables.Any(t => t.Row == row && t.Col == col);
-                    <div class="grid-cell">
-                        @if (hasTable)
-                        {
-                            var table = Model.Tables.First(t => t.Row == row && t.Col == col);
-                            <div class="table-cell" title="Table @table.Number (ID: @table.Id)">
-                                <a asp-page="Table" asp-route-id="@table.Id">
-                                    @table.Number
-                                </a>
-                                
-                            </div>
-                        }
-                        else
-                        {
-                            <div class="empty-cell">
-                           
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-        }
-    </div>
+            <details class="control-box">
+                <summary>Create Table</summary>
+                <form method="post" asp-page-handler="AddTable">
+                    @Html.AntiForgeryToken()
+                    <label>Row</label>
+                    <input type="number" name="row" />
 
-}
+                    <label>Column</label>
+                    <input type="number" name="col" />
+
+                    <label>Number</label>
+                    <input type="number" name="num" />
+
+                    <button type="submit" class="btn">Add Table</button>
+                </form>
+            </details>
+
+            <details class="control-box">
+                <summary>Delete Table</summary>
+                <form method="post" asp-page-handler="DeleteTable">
+                    @Html.AntiForgeryToken()
+                    <label>Row</label>
+                    <input type="number" name="row" />
+
+                    <label>Column</label>
+                    <input type="number" name="col" />
+
+                    <button type="submit" class="btn delete">Delete Table</button>
+                </form>
+            </details>
+
+            @*         <section>
+            <h4>Delete All Tables</h4>
+            <form method="post" asp-page-handler="DeleteTables">
+                @Html.AntiForgeryToken()
+                <button type="submit" class="btn delete-all">Delete ALL</button>
+            </form>
+        </section> *@
+
+            <details class="control-box">
+                <summary>Update Table</summary>
+                <form method="post" asp-page-handler="UpdateTable">
+                    @Html.AntiForgeryToken()
+
+                    <label>Table ID</label>
+                    <input type="number" name="id" />
+
+                    <label>Row</label>
+                    <input type="number" name="row" />
+
+                    <label>Column</label>
+                    <input type="number" name="col" />
+
+                    <label>Number</label>
+                    <input type="number" name="num" />
+
+                    <button type="submit" class="btn update">Update</button>
+                </form>
+            </details>
+
+        </aside>
+
+    }
+    
+
+    <!-- RIGHT PANEL ----------------------------------------------------------->
+    <main class="hall-grid">
+        <h3>Table Layout</h3>
+
+        <div class="grid-container">
+            @for (int row = 0; row < 10; row++)
+            {
+                <div class="grid-row">
+                    @for (int col = 0; col < 10; col++)
+                    {
+                        var hasTable = Model.Tables.Any(t => t.Row == row && t.Col == col);
+
+                        <div class="grid-cell" data-row="@row" data-col="@col">
+                            @if (hasTable)
+                            {
+                                var table = Model.Tables.First(t => t.Row == row && t.Col == col);
+                                <div class="table-cell" title="Table @table.Number (ID: @table.Id)">
+                                    <a class="table-link" asp-page="Table" asp-route-id="@table.Id">
+                                        @table.Number
+                                    </a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="empty-cell"></div>
+                            }
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </main>
+
+</div>
