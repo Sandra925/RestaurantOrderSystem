@@ -3,8 +3,88 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<style>
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 20px;
+    }
+    .section-title {
+        margin-top: 40px;
+        font-weight: 600;
+    }
+    .feature-box {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 25px;
+        margin-top: 20px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        transition: 0.3s;
+    }
+    .feature-box:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+    .icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #6c63ff;
+    }
+    body {
+        background: #f6f7fb;
+    }
+</style>
+<div class="container text-center mt-5">
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h2 class="hero-title">Restaurant Order System</h2>
+
+    <h3 class="section-title">Our Goal</h3>
+    <p class="lead">
+        To create a restaurant management system that makes daily operations simpler, faster, and cleaner for restaurant staff.
+        The system streamlines order taking, improves communication, and enhances overall workflow efficiency.
+    </p>
+
+    <h3 class="section-title">Key Features</h3>
+
+    <div class="row mt-4">
+
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon">👨‍💼</div>
+                <h5><b>Administrator</b></h5>
+                <ul class="text-start">
+                    <li>Create new tables</li>
+                    <li>Remove dishes (with or without write-off)</li>
+                    <li>Close overall shift</li>
+                    <li>Review closed checks/receipts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon">🍹</div>
+                <h5><b>Waiter</b></h5>
+                <ul class="text-start">
+                    <li>Take and manage customer orders</li>
+                    <li>Move orders between tables</li>
+                    <li>Split tables (e.g., 1.1, 1.2)</li>
+                    <li>Mark orders as paid (cash or card)</li>
+                    <li>Switch between different hall layouts</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="feature-box">
+                <div class="icon">👨‍🍳</div>
+                <h5><b>Cook</b></h5>
+                <ul class="text-start">
+                    <li>Mark food order tickets as completed</li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+
 </div>

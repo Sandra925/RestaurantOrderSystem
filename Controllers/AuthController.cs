@@ -84,28 +84,14 @@ namespace RestaurantOrderSystem.Controllers
             });
         }
 
-        // For JWT, "logout" is just client-side token discard. This is here for API symmetry only.
         [HttpPost("logout")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Logout()
         {
-            try
-            {
-                // Sign out cookie authentication
-                await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"SignOut error: {ex.Message}");
-            }
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            HttpContext.Session.Clear();
 
-            // Clear JWT token stored for API
-            HttpContext.Session.Remove("ApiJwt");
-
-            // Clear entire session if you prefer
-            // HttpContext.Session.Clear();
-
-            return RedirectToPage("/Index");
+            return Ok(new { message = "Logged out successfully" });
         }
 
         [HttpPost("verify-token")]

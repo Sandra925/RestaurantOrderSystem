@@ -69,7 +69,20 @@ namespace RestaurantOrderSystem.Pages
                 });
             }
 
-            return LocalRedirect(returnUrl);
+            switch (user.Role)
+            {
+                case Role.Cook:
+                    return LocalRedirect("/Kitchen");
+
+                case Role.Waiter:
+                    return LocalRedirect("/Bar");
+
+                case Role.Admin:
+                    return LocalRedirect("/Admin");
+
+                default:
+                    return LocalRedirect("/Index");
+            }
         }
 
         public async Task<IActionResult> OnPostLogoutAsync()
