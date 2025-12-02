@@ -20,6 +20,7 @@
         margin-top: 20px;
         box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         transition: 0.3s;
+        margin-bottom: 30px;
     }
     .feature-box:hover {
         transform: translateY(-5px);
@@ -49,8 +50,8 @@
     <div class="row mt-4">
 
         <div class="col-md-4">
-            <div class="feature-box">
-                <div class="icon">👨‍💼</div>
+            <div class="feature-box text-center">
+                <img src="/Images/admin.png" />
                 <h5><b>Administrator</b></h5>
                 <ul class="text-start">
                     <li>Create new tables</li>
@@ -62,8 +63,8 @@
         </div>
 
         <div class="col-md-4">
-            <div class="feature-box">
-                <div class="icon">🍹</div>
+            <div class="feature-box text-center">
+                <img src="/Images/Waiter.png" />
                 <h5><b>Waiter</b></h5>
                 <ul class="text-start">
                     <li>Take and manage customer orders</li>
@@ -76,15 +77,45 @@
         </div>
 
         <div class="col-md-4">
-            <div class="feature-box">
-                <div class="icon">👨‍🍳</div>
+            <div class="feature-box text-center">
+                <img src="/Images/cook.png" />
                 <h5><b>Cook</b></h5>
                 <ul class="text-start">
                     <li>Mark food order tickets as completed</li>
                 </ul>
             </div>
+
         </div>
 
     </div>
+    <button class="btn btn-info mb-3" data-bs-toggle="modal" data-bs-target="#infoModal">
+        <i class="bi bi-info-circle"></i> Page Info
+    </button>
+</div>
 
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Item Management Information</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <p>
+                    Šiame lange galite kurti, redaguoti ir šalinti meniu elementus.
+                    Visi pridėti elementai tampa prieinami padavėjams formuojant klientų užsakymus.
+                </p>
+                <ul>
+                    <li><strong>Add Item</strong> – sukuria naują patiekalą.</li>
+                    <li><strong>Delete Item</strong> – pašalina pasirinktą patiekalą pagal ID.</li>
+                    <li><strong>Update Item</strong> – atnaujina patiekalo pavadinimą ar kainą.</li>
+                </ul>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

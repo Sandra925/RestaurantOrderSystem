@@ -16,7 +16,8 @@ namespace RestaurantOrderSystem.Models
             CustomerCount = customerCount;
             CreatedAt = DateTime.UtcNow;
             UpdatedAt = DateTime.UtcNow;
-            Status = OrderStatus.Pending;
+            Status = OrderStatus.Open;
+            PaymentStatus = PaymentStatus.Unpaid;
         }
 
 
@@ -40,9 +41,28 @@ namespace RestaurantOrderSystem.Models
         public int TableId { get; set; }
 
         [JsonIgnore]
-        public virtual Table? Table { get; set; }
+        public  Table? Table { get; set; }
 
-        public virtual ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public  ICollection<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
 
+        [Required]
+        public PaymentStatus PaymentStatus { get; set; }
+
+        public PaymentMethod? PaymentMethod { get; set; }
+
+        public DateTime? PaidAt { get; set; }
+    }
+
+    public enum PaymentStatus
+    {
+        Unpaid,
+        Paid,
+        Cancelled
+    }
+
+    public enum PaymentMethod
+    {
+        Card,
+        Cash
     }
 }

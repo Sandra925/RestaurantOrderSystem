@@ -22,7 +22,7 @@ namespace RestaurantOrderSystem.Controllers
         [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            List<Order> orders = await _context.Orders.ToListAsync();
+            List<Order> orders = await _context.Orders.Include(x=>x.OrderItems).ToListAsync();
             if (orders.Count == 0)
             {
                 return NotFound();
@@ -159,10 +159,91 @@ namespace RestaurantOrderSystem.Controllers
             }
         }
 
+        // POST: api/orders/{id}/pay
+        [HttpPost("{id}/pay")]
+        [Authorize(Policy = "CanCreateOrders")]
+        public async Task<IActionResult> PayOrder(int id, [FromBody] PaymentRequest request)
+        {
+            try
+            {
+                var order = await _context.Orders
+                    .Include(o => o.Table)
+                    .FirstOrDefaultAsync(o => o.Id == id);
+
+                if (order == null)
+                    return NotFound(new { message = "Order not found" });
+
+                if (order.PaymentStatus == PaymentStatus.Paid)
+                    return BadRequest(new { message = "Order has already been paid" });
+
+                order.PaymentStatus = PaymentStatus.Paid;
+                order.PaymentMethod = request.PaymentMethod;
+                order.PaidAt = DateTime.UtcNow;
+
+                // Update table status to Available when order is paid
+                if (order.Table != null)
+                {
+                    order.Table.Status = TableStatus.Available;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return Ok(new
+                {
+                    message = "Order paid successfully",
+                    order = new
+                    {
+                        order.Id,
+                        order.TableId,
+                        order.Status,
+                        order.PaymentStatus,
+                        order.PaymentMethod,
+                        order.PaidAt,
+                        order.CreatedAt,
+                        order.UpdatedAt
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while processing payment", error = ex.Message });
+            }
+        }
+
+        // GET: api/orders/{id}/payment-status
+        [HttpGet("{id}/payment-status")]
+        [Authorize(Policy = "CanViewOrders")]
+        public async Task<IActionResult> GetPaymentStatus(int id)
+        {
+            try
+            {
+                var order = await _context.Orders.FindAsync(id);
+
+                if (order == null)
+                    return NotFound(new { message = "Order not found" });
+
+                return Ok(new
+                {
+                    orderId = order.Id,
+                    paymentStatus = order.PaymentStatus,
+                    paymentMethod = order.PaymentMethod,
+                    paidAt = order.PaidAt
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving payment status", error = ex.Message });
+            }
+        }
+
         public class OrderStatusUpdateRequest
         {
             public OrderStatus Status { get; set; }
         }
 
+        public class PaymentRequest
+        {
+            public PaymentMethod PaymentMethod { get; set; }
+        }
     }
 }

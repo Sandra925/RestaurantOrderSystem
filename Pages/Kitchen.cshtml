@@ -6,7 +6,6 @@
 
 <div class="container">
     <h1 class="mb-4">Hell's Kitchen </h1>
-\
     @if (TempData["SuccessMessage"] != null)
     {
         <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -58,7 +57,7 @@
                                         <button type="submit" asp-page-handler="MarkInProgress"
                                                 asp-route-orderId="@order.Id"
                                                 class="btn btn-primary btn-sm w-100">
-                                            Start Cooking
+                                            Done
                                         </button>
                                     </form>
                                 </div>
@@ -72,63 +71,10 @@
                 <p class="text-muted">No pending orders</p>
             }
         </div>
-    </div>
-
-    <div class="card mb-4">
-        <div class="card-header bg-info text-white">
-            <h2 class="h5 mb-0">In Progress (@Model.InProgressOrders.Count)</h2>
-        </div>
-        <div class="card-body">
-            @if (Model.InProgressOrders.Any())
-            {
-                <div class="row">
-                    @foreach (var order in Model.InProgressOrders)
-                    {
-                        <div class="col-md-6 col-lg-4 mb-3">
-                            <div class="card h-100 border-info">
-                                <div class="card-header">
-                                    <strong>Order #@order.Id</strong> - Table @order.TableId
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>Customers:</strong> @order.CustomerCount</p>
-                                    <p><strong>Started:</strong> @order.CreatedAt.ToString("HH:mm")</p>
-
-                                    @if (order.OrderItems?.Any() == true)
-                                    {
-                                        <div class="mt-2">
-                                            <strong>Items:</strong>
-                                            <ul class="list-unstyled mb-2">
-                                                @foreach (var item in order.OrderItems)
-                                                {
-                                                    <li>• @item.Quantity x @item.Item?.Name</li>
-                                                }
-                                            </ul>
-                                        </div>
-                                    }
-
-                                    <form method="post" class="mt-2">
-                                        <button type="submit" asp-page-handler="MarkReady"
-                                                asp-route-orderId="@order.Id"
-                                                class="btn btn-success btn-sm w-100">
-                                            Mark as Ready
-                                        </button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-            else
-            {
-                <p class="text-muted">No orders in progress</p>
-            }
-        </div>
-    </div>
 
     <div class="card mb-4">
         <div class="card-header bg-success text-white">
-            <h2 class="h5 mb-0">Ready to Serve (@Model.ReadyOrders.Count)</h2>
+            <h2 class="h5 mb-0">Ready(@Model.ReadyOrders.Count)</h2>
         </div>
         <div class="card-body">
             @if (Model.ReadyOrders.Any())
@@ -158,11 +104,9 @@
                                         </div>
                                     }
 
-                                    <form method="post" class="mt-2">
-                                        <button type="submit" asp-page-handler="MarkServed"
-                                                asp-route-orderId="@order.Id"
-                                                class="btn btn-secondary btn-sm w-100">
-                                            Mark as Served
+                                    <form method="post" asp-page-handler="MarkReady" asp-route-orderId="@order.Id" class="mt-2">
+                                        <button type="submit" class="btn btn-danger btn-sm w-100">
+                                            Delete Order
                                         </button>
                                     </form>
                                 </div>

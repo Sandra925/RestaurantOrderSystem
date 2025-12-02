@@ -41,18 +41,13 @@ namespace RestaurantOrderSystem.Models
         public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
         [NotMapped]
-        public Order? CurrentOrder => Orders?.FirstOrDefault(o => o.Status != OrderStatus.Completed && o.Status != OrderStatus.Cancelled);
+        public Order? CurrentOrder => Orders?.FirstOrDefault(o => o.Status != OrderStatus.Cancelled && o.PaymentStatus == PaymentStatus.Unpaid);
     }
 
     public enum OrderStatus
     {
-
-        Pending,
         Open,
-        InProgress,
         Ready,
-        Served,
-        Completed,
         Cancelled
     }
 

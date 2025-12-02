@@ -77,13 +77,14 @@
 }
 
 .table-cell {
-    background: #4caf50;
-    color: white;
-    font-weight: bold;
-    border-radius: 4px;
+    background: var(--accent);
+    width: 100%;
+    height: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+    font-weight: 600;
 }
 
     .table-cell a {
@@ -134,7 +135,7 @@
         cursor: pointer;
         background: #e9ecef;
         list-style: none;
-        transition: background 0.2s ease;
+        transition: background 0.02s ease;
     }
 
         /* Remove default marker */
@@ -154,7 +155,7 @@
         overflow: hidden;
         opacity: 0;
         transform: translateY(-6px);
-        transition: max-height 0.3s ease, opacity 0.3s ease, transform 0.3s ease;
+        transition: max-height 0.8s ease, opacity 0.8s ease, transform 0.8s ease;
     }
 
     /* When open → animated expand */

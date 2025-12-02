@@ -19,8 +19,7 @@ namespace RestaurantOrderSystem.Pages
         }
 
         public List<Order> Orders { get; set; } = new List<Order>();
-        public List<Order> PendingOrders => Orders.Where(o => o.Status == OrderStatus.Pending).ToList();
-        public List<Order> InProgressOrders => Orders.Where(o => o.Status == OrderStatus.InProgress).ToList();
+        public List<Order> PendingOrders => Orders.Where(o => o.Status == OrderStatus.Open).ToList();
         public List<Order> ReadyOrders => Orders.Where(o => o.Status == OrderStatus.Ready).ToList();
 
         public async Task OnGetAsync()
@@ -32,14 +31,6 @@ namespace RestaurantOrderSystem.Pages
         {
             try
             {
-                // Get the JWT token from the cookie
-                var token = Request.Cookies["access_token"];
-                if (!string.IsNullOrEmpty(token))
-                {
-                    // Set the authorization header
-                    _httpClient.DefaultRequestHeaders.Authorization =
-                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                }
 
                 var response = await _httpClient.GetAsync("/api/orders");
                 if (response.IsSuccessStatusCode)
@@ -48,7 +39,8 @@ namespace RestaurantOrderSystem.Pages
                     Orders = JsonSerializer.Deserialize<List<Order>>(jsonString, new JsonSerializerOptions
                     {
                         PropertyNameCaseInsensitive = true
-                    }) ?? new List<Order>();
+                    });
+
                 }
                 else
                 {
@@ -67,14 +59,6 @@ namespace RestaurantOrderSystem.Pages
         {
             try
             {
-                // Get the JWT token from the cookie
-                var token = Request.Cookies["access_token"];
-                if (!string.IsNullOrEmpty(token))
-                {
-                    _httpClient.DefaultRequestHeaders.Authorization =
-                        new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-                }
-
                 var updateData = new { status = newStatus };
                 var response = await _httpClient.PatchAsJsonAsync($"/api/orders/{orderId}/status", updateData);
 
@@ -98,17 +82,13 @@ namespace RestaurantOrderSystem.Pages
 
         public async Task<IActionResult> OnPostMarkInProgressAsync(int orderId)
         {
-            return await OnPostUpdateOrderStatusAsync(orderId, OrderStatus.InProgress);
+            return await OnPostUpdateOrderStatusAsync(orderId, OrderStatus.Ready);
         }
 
         public async Task<IActionResult> OnPostMarkReadyAsync(int orderId)
         {
-            return await OnPostUpdateOrderStatusAsync(orderId, OrderStatus.Ready);
+            return await OnPostUpdateOrderStatusAsync(orderId, OrderStatus.Cancelled);
         }
 
-        public async Task<IActionResult> OnPostMarkServedAsync(int orderId)
-        {
-            return await OnPostUpdateOrderStatusAsync(orderId, OrderStatus.Served);
-        }
     }
 }

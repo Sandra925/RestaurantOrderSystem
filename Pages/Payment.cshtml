@@ -1,0 +1,168 @@
+@page
+@using RestaurantOrderSystem.Models
+@model RestaurantOrderSystem.Pages.PaymentModel
+
+@{
+    ViewData["Title"] = "Payment";
+}
+
+<div class="payment-container">
+    <h2>Payment - Table @Model.Table?.Number</h2>
+    
+    @if (!string.IsNullOrEmpty(TempData["SuccessMessage"]?.ToString()))
+    {
+        <div class="alert alert-success">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+    {
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"]
+        </div>
+    }
+
+    @if (Model.Order != null)
+    {
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <p><strong>Order ID:</strong> @Model.Order.Id</p>
+            <p><strong>Table:</strong> @Model.Table?.Number</p>
+            <p><strong>Customer Count:</strong> @Model.Order.CustomerCount</p>
+            <p><strong>Order Status:</strong> @Model.Order.Status</p>
+            <p><strong>Payment Status:</strong> @Model.Order.PaymentStatus</p>
+
+            @if (Model.Order.OrderItems != null && Model.Order.OrderItems.Count > 0)
+            {
+                <h4>Items Ordered</h4>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Order.OrderItems)
+                        {
+                            <tr>
+                                <td>@item.Item?.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>$@item.Item?.Price</td>
+                                <td>$@(item.Item?.Price * item.Quantity)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div class="order-total">
+                    <h4>Total Amount: $@(Model.Order.OrderItems.Sum(oi => (oi.Item?.Price ?? 0) * oi.Quantity))</h4>
+                </div>
+            }
+
+            @if (Model.Order.PaymentStatus == PaymentStatus.Unpaid)
+            {
+                <div class="payment-options">
+                    <h3>Select Payment Method</h3>
+                    
+                    <form method="post" class="payment-form">
+                        <input type="hidden" name="OrderId" value="@Model.OrderId" />
+                        <input type="hidden" name="TableId" value="@Model.TableId" />
+
+                        <button type="submit" asp-page-handler="PayWithCard" class="btn btn-primary btn-lg payment-btn">
+                            <span class="payment-icon">??</span>
+                            Pay with Card
+                        </button>
+
+                        <button type="submit" asp-page-handler="PayWithCash" class="btn btn-success btn-lg payment-btn">
+                            <span class="payment-icon">??</span>
+                            Pay with Cash
+                        </button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <p>This order has already been paid via @Model.Order.PaymentMethod on @Model.Order.PaidAt?.ToString("g")</p>
+                    <a href="/Table/@Model.TableId" class="btn btn-primary">Back to Table</a>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            Order not found. <a href="/">Back to Home</a>
+        </div>
+    }
+</div>
+
+<style>
+    .payment-container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background-color: #f9f9f9;
+    }
+
+    .order-summary {
+        background-color: white;
+        padding: 20px;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .order-total {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #f0f0f0;
+        border-left: 4px solid #007bff;
+        font-size: 1.2em;
+    }
+
+    .payment-options {
+        margin-top: 30px;
+    }
+
+    .payment-form {
+        display: flex;
+        gap: 10px;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .payment-btn {
+        padding: 15px 20px;
+        font-size: 1.1em;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .payment-icon {
+        font-size: 1.5em;
+    }
+
+    .table {
+        width: 100%;
+        margin: 15px 0;
+    }
+
+    .table th, .table td {
+        padding: 10px;
+        text-align: left;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .table th {
+        background-color: #f0f0f0;
+        font-weight: bold;
+    }
+</style>
