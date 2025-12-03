@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RestaurantOrderSystem.Models;
 using System.Text.Json;
+using static RestaurantOrderSystem.Controllers.OrdersController;
 
 namespace RestaurantOrderSystem.Pages
 {
@@ -71,13 +72,12 @@ namespace RestaurantOrderSystem.Pages
         {
             try
             {
-                var paymentData = new { paymentMethod = "Card" };
+                var paymentData = new PaymentRequest{ PaymentMethod = PaymentMethod.Card };
                 var response = await _httpClient.PostAsJsonAsync($"/api/orders/{OrderId}/pay", paymentData);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Payment processed successfully (Card)";
-                    return RedirectToPage("/Table", new { id = TableId });
+                    return RedirectToPage("/Hall");
                 }
                 else
                 {
@@ -97,13 +97,12 @@ namespace RestaurantOrderSystem.Pages
         {
             try
             {
-                var paymentData = new { paymentMethod = "Cash" };
+                var paymentData = new PaymentRequest { PaymentMethod = PaymentMethod.Cash };
                 var response = await _httpClient.PostAsJsonAsync($"/api/orders/{OrderId}/pay", paymentData);
 
                 if (response.IsSuccessStatusCode)
                 {
-                    TempData["SuccessMessage"] = "Payment processed successfully (Cash)";
-                    return RedirectToPage("/Table", new { id = TableId });
+                    return RedirectToPage("/Hall");
                 }
                 else
                 {

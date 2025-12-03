@@ -22,7 +22,10 @@ namespace RestaurantOrderSystem.Controllers
         [Authorize(Policy = "CanViewOrders")]
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
-            List<Order> orders = await _context.Orders.Include(x=>x.OrderItems).ToListAsync();
+            List<Order> orders = await _context.Orders
+                .Include(x => x.OrderItems)
+                .ThenInclude(oi => oi.Item)
+                .ToListAsync();
             if (orders.Count == 0)
             {
                 return NotFound();

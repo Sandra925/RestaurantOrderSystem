@@ -73,13 +73,11 @@
                         <input type="hidden" name="TableId" value="@Model.TableId" />
 
                         <button type="submit" asp-page-handler="PayWithCard" class="btn btn-primary btn-lg payment-btn">
-                            <span class="payment-icon">??</span>
-                            Pay with Card
+                            <i class="bi bi-credit-card"></i> Pay with Card
                         </button>
 
                         <button type="submit" asp-page-handler="PayWithCash" class="btn btn-success btn-lg payment-btn">
-                            <span class="payment-icon">??</span>
-                            Pay with Cash
+                            <i class="bi bi-cash-coin"></i> Pay with Cash
                         </button>
                     </form>
                 </div>
@@ -100,69 +98,3 @@
         </div>
     }
 </div>
-
-<style>
-    .payment-container {
-        max-width: 600px;
-        margin: 20px auto;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        background-color: #f9f9f9;
-    }
-
-    .order-summary {
-        background-color: white;
-        padding: 20px;
-        border-radius: 5px;
-        margin-bottom: 20px;
-    }
-
-    .order-total {
-        margin: 20px 0;
-        padding: 15px;
-        background-color: #f0f0f0;
-        border-left: 4px solid #007bff;
-        font-size: 1.2em;
-    }
-
-    .payment-options {
-        margin-top: 30px;
-    }
-
-    .payment-form {
-        display: flex;
-        gap: 10px;
-        flex-direction: column;
-        margin-top: 20px;
-    }
-
-    .payment-btn {
-        padding: 15px 20px;
-        font-size: 1.1em;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    }
-
-    .payment-icon {
-        font-size: 1.5em;
-    }
-
-    .table {
-        width: 100%;
-        margin: 15px 0;
-    }
-
-    .table th, .table td {
-        padding: 10px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .table th {
-        background-color: #f0f0f0;
-        font-weight: bold;
-    }
-</style>

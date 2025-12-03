@@ -11,11 +11,6 @@
         @if (Model.Table.CurrentOrder != null)
         {
             <a asp-page="/Order" asp-route-id="@Model.Table.CurrentOrder.Id" class="btn btn-primary">Open Current Order</a>
-            
-            @if (Model.Table.CurrentOrder.Status == OrderStatus.Ready && Model.Table.CurrentOrder.PaymentStatus == PaymentStatus.Unpaid)
-            {
-                <a asp-page="/Payment" asp-route-orderId="@Model.Table.CurrentOrder.Id" asp-route-tableId="@Model.Table.Id" class="btn btn-warning">Process Payment</a>
-            }
         }
         else if (Model.Table.Orders != null && Model.Table.Orders.Count == 0)
         {

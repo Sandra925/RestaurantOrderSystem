@@ -1,0 +1,606 @@
+openapi: 3.0.0
+info:
+  title: Restaurant Order System - Table Orders API
+  description: |
+    API for managing orders associated with restaurant tables. This API handles creating, 
+    retrieving, updating, and deleting orders for specific tables with authentication and 
+    authorization controls.
+  version: 1.0.0
+  contact:
+    name: API Support
+    
+servers:
+  - url: http://localhost:5000
+    description: Development server
+  - url: http://localhost:5001
+    description: Development server (HTTPS)
+
+components:
+  schemas:
+    Order:
+      type: object
+      required:
+        - id
+        - tableId
+        - customerCount
+        - createdAt
+        - status
+        - paymentStatus
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique order identifier
+          example: 1
+        tableId:
+          type: integer
+          format: int32
+          description: ID of the table associated with this order
+          example: 5
+        customerCount:
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 20
+          description: Number of customers at the table
+          example: 4
+        createdAt:
+          type: string
+          format: date-time
+          description: Timestamp when the order was created (UTC)
+          example: "2024-12-01T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the order was last updated (UTC)
+          example: "2024-12-01T11:15:00Z"
+        status:
+          type: string
+          enum:
+            - Open
+            - Ready
+            - Cancelled
+          description: Current status of the order
+          example: "Open"
+        paymentStatus:
+          type: string
+          enum:
+            - Unpaid
+            - Paid
+            - Cancelled
+          description: Payment status of the order
+          example: "Unpaid"
+        paymentMethod:
+          type: string
+          enum:
+            - Card
+            - Cash
+          nullable: true
+          description: Payment method used for the order
+          example: "Card"
+        paidAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: Timestamp when the order was paid (UTC)
+          example: "2024-12-01T11:45:00Z"
+        orderItems:
+          type: array
+          description: List of items in this order
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 10
+              orderId:
+                type: integer
+                example: 1
+              itemId:
+                type: integer
+                example: 3
+              quantity:
+                type: integer
+                minimum: 1
+                maximum: 50
+                example: 2
+    
+    Table:
+      type: object
+      required:
+        - id
+        - number
+        - row
+        - col
+        - status
+      properties:
+        id:
+          type: integer
+          format: int32
+          description: Unique table identifier
+          example: 5
+        number:
+          type: integer
+          format: int32
+          description: Table number
+          example: 5
+        row:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 9
+          description: Row position of the table in the hall
+          example: 2
+        col:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 9
+          description: Column position of the table in the hall
+          example: 3
+        status:
+          type: string
+          enum:
+            - Available
+            - Occupied
+            - Reserved
+            - Maintenance
+          description: Current status of the table
+          example: "Occupied"
+    
+    ErrorResponse:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          description: Error message describing what went wrong
+          example: "Table not found"
+    
+    ValidationError:
+      type: object
+      properties:
+        errors:
+          type: object
+          description: Field-level validation errors
+          additionalProperties:
+            type: array
+            items:
+              type: string
+            example:
+              - "The field CustomerCount must be between 1 and 20."
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JWT Bearer token for authentication. Include in Authorization header:
+        Authorization: Bearer {token}
+
+  responses:
+    UnauthorizedResponse:
+      description: Missing or invalid authentication token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Unauthorized"
+    
+    ForbiddenResponse:
+      description: User lacks required permissions (invalid policy)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            message: "Forbidden"
+    
+    NotFoundResponse:
+      description: Requested resource (table or order) not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+
+security:
+  - BearerAuth: []
+
+paths:
+  /api/tables/{tableId}/orders:
+    get:
+      summary: Get all orders for a table
+      description: |
+        Retrieves all orders associated with a specific table. Requires CanViewOrders policy.
+      operationId: GetOrdersForTable
+      tags:
+        - Table Orders
+      parameters:
+        - name: tableId
+          in: path
+          required: true
+          description: The ID of the table
+          schema:
+            type: integer
+            format: int32
+          example: 5
+      responses:
+        '200':
+          description: Successfully retrieved orders for the table
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              example:
+                - id: 1
+                  tableId: 5
+                  customerCount: 4
+                  createdAt: "2024-12-01T10:30:00Z"
+                  updatedAt: "2024-12-01T11:15:00Z"
+                  status: "Open"
+                  paymentStatus: "Unpaid"
+                  paymentMethod: null
+                  paidAt: null
+                  orderItems: []
+                - id: 2
+                  tableId: 5
+                  customerCount: 4
+                  createdAt: "2024-12-01T14:00:00Z"
+                  updatedAt: null
+                  status: "Ready"
+                  paymentStatus: "Unpaid"
+                  paymentMethod: null
+                  paidAt: null
+                  orderItems: []
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          description: Table not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Table not found"
+
+    post:
+      summary: Create a new order for a table
+      description: |
+        Creates a new order for a specific table. The order is initialized with Open status 
+        and Unpaid payment status. Requires CanCreateOrders policy.
+      operationId: CreateOrder
+      tags:
+        - Table Orders
+      parameters:
+        - name: tableId
+          in: path
+          required: true
+          description: The ID of the table
+          schema:
+            type: integer
+            format: int32
+          example: 5
+      requestBody:
+        required: true
+        description: Order details
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - customerCount
+              properties:
+                id:
+                  type: integer
+                  description: Optional - will be ignored, server generates ID
+                  example: 0
+                customerCount:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 20
+                  description: Number of customers at the table
+                  example: 4
+                status:
+                  type: string
+                  enum:
+                    - Open
+                    - Ready
+                    - Cancelled
+                  description: Optional - defaults to Open
+                  example: "Open"
+                paymentStatus:
+                  type: string
+                  enum:
+                    - Unpaid
+                    - Paid
+                    - Cancelled
+                  description: Optional - defaults to Unpaid
+                  example: "Unpaid"
+            example:
+              customerCount: 4
+      responses:
+        '201':
+          description: Order successfully created
+          headers:
+            Location:
+              schema:
+                type: string
+              description: URI of the newly created order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 3
+                tableId: 5
+                customerCount: 4
+                createdAt: "2024-12-01T15:45:00Z"
+                updatedAt: "2024-12-01T15:45:00Z"
+                status: "Open"
+                paymentStatus: "Unpaid"
+                paymentMethod: null
+                paidAt: null
+                orderItems: []
+        '400':
+          description: Invalid request - null order payload or ID mismatch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Order payload is null"
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          description: Table not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Table not found"
+        '422':
+          description: Unprocessable entity - validation errors
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationError'
+              example:
+                errors:
+                  CustomerCount:
+                    - "The field CustomerCount must be between 1 and 20."
+
+  /api/tables/{tableId}/orders/{orderId}:
+    get:
+      summary: Get a specific order for a table
+      description: |
+        Retrieves a specific order by ID for a given table. Returns 404 if the order does not 
+        belong to the specified table. Requires CanViewOrders policy.
+      operationId: GetOrder
+      tags:
+        - Table Orders
+      parameters:
+        - name: tableId
+          in: path
+          required: true
+          description: The ID of the table
+          schema:
+            type: integer
+            format: int32
+          example: 5
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the order
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        '200':
+          description: Successfully retrieved the order
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 1
+                tableId: 5
+                customerCount: 4
+                createdAt: "2024-12-01T10:30:00Z"
+                updatedAt: "2024-12-01T11:15:00Z"
+                status: "Open"
+                paymentStatus: "Unpaid"
+                paymentMethod: null
+                paidAt: null
+                orderItems: []
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          description: Table or order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "Table not found"
+
+    put:
+      summary: Update an order for a table
+      description: |
+        Updates an existing order for a specific table. Currently supports updating the 
+        CustomerCount field. The TableId is automatically set based on the route parameter. 
+        Requires CanCreateOrders policy.
+      operationId: UpdateOrder
+      tags:
+        - Table Orders
+      parameters:
+        - name: tableId
+          in: path
+          required: true
+          description: The ID of the table
+          schema:
+            type: integer
+            format: int32
+          example: 5
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the order to update
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      requestBody:
+        required: true
+        description: Updated order details. The id field must match the orderId parameter.
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+                - customerCount
+              properties:
+                id:
+                  type: integer
+                  description: Must match the orderId in the URL path
+                  example: 1
+                customerCount:
+                  type: integer
+                  format: int32
+                  minimum: 1
+                  maximum: 20
+                  description: Updated number of customers
+                  example: 5
+                status:
+                  type: string
+                  enum:
+                    - Open
+                    - Ready
+                    - Cancelled
+                  description: Order status (optional)
+                  example: "Open"
+                paymentStatus:
+                  type: string
+                  enum:
+                    - Unpaid
+                    - Paid
+                    - Cancelled
+                  description: Payment status (optional)
+                  example: "Unpaid"
+            example:
+              id: 1
+              customerCount: 5
+      responses:
+        '200':
+          description: Order successfully updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+              example:
+                id: 1
+                tableId: 5
+                customerCount: 5
+                createdAt: "2024-12-01T10:30:00Z"
+                updatedAt: "2024-12-01T15:50:00Z"
+                status: "Open"
+                paymentStatus: "Unpaid"
+                paymentMethod: null
+                paidAt: null
+                orderItems: []
+        '400':
+          description: Invalid request - ID mismatch between URL and body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              example:
+                message: "ID mismatch"
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          description: Table or order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                TableNotFound:
+                  value:
+                    message: "Table not found"
+                OrderNotFound:
+                  value:
+                    message: "Order not found for this table"
+
+    delete:
+      summary: Delete an order from a table
+      description: |
+        Deletes a specific order. This operation is restricted and requires the AdminOnly policy.
+      operationId: DeleteOrder
+      tags:
+        - Table Orders
+      parameters:
+        - name: tableId
+          in: path
+          required: true
+          description: The ID of the table
+          schema:
+            type: integer
+            format: int32
+          example: 5
+        - name: orderId
+          in: path
+          required: true
+          description: The ID of the order to delete
+          schema:
+            type: integer
+            format: int32
+          example: 1
+      responses:
+        '204':
+          description: Order successfully deleted
+        '401':
+          $ref: '#/components/responses/UnauthorizedResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenResponse'
+        '404':
+          description: Table or order not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                TableNotFound:
+                  value:
+                    message: "Table not found"
+                OrderNotFound:
+                  value:
+                    message: "Order not found for this table"
+
+tags:
+  - name: Table Orders
+    description: |
+      Operations for managing orders associated with restaurant tables.
+      All endpoints require Bearer token authentication.
+      
+      **Authorization Policies:**
+      - `CanViewOrders`: Required to view orders (GET operations)
+      - `CanCreateOrders`: Required to create or update orders (POST, PUT operations)
+      - `AdminOnly`: Required to delete orders (DELETE operations)

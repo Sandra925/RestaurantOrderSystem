@@ -25,6 +25,58 @@
                     </div>
                 </div>
             </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <h5 style="margin: 0;">Payment</h5>
+                            @{
+                                var paymentStatusClass = Model.Order.PaymentStatus == PaymentStatus.Paid ? "badge-success" : "badge-warning";
+                                var paymentStatusText = Model.Order.PaymentStatus == PaymentStatus.Paid ? "Paid" : "Unpaid";
+                            }
+                            <span class="badge @paymentStatusClass" style="font-size: 0.9rem; padding: 6px 12px;">@paymentStatusText</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        @{
+                            var hasItems = Model.OrderItems != null && Model.OrderItems.Any();
+                            var orderTotal = hasItems ? Model.OrderItems.Sum(oi => oi.Quantity * (oi.Item?.Price ?? 0)) : 0;
+                        }
+                        @if (Model.Order.PaymentStatus == PaymentStatus.Unpaid)
+                        {
+                            @if (hasItems)
+                            {
+                                <p><strong>Total Amount:</strong> @orderTotal.ToString("C")</p>
+                                @if (Model.Order.Status == OrderStatus.Ready || Model.Order.Status == OrderStatus.Open)
+                                {
+                                    <a asp-page="/Payment" asp-route-orderId="@Model.Order.Id" asp-route-tableId="@Model.Order.TableId" class="btn btn-warning" style="margin-top: 10px;">Process Payment</a>
+                                }
+                                else
+                                {
+                                    <div class="alert alert-info" role="alert">
+                                        Waiting for kitchen to complete the order...
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-warning" role="alert">
+                                    <strong>No items in order</strong><br>
+                                    Add items to the order before processing payment.
+                                </div>
+                            }
+                        }
+                        else if (Model.Order.PaymentStatus == PaymentStatus.Paid)
+                        {
+                            <div class="alert alert-success" role="alert">
+                                <strong>Payment Complete</strong><br>
+                                Paid via @Model.Order.PaymentMethod on @Model.Order.PaidAt?.ToString("g")
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+         
         </div>
 
         <div class="row">
@@ -147,19 +199,3 @@
         </div>
     }
 </div>
-
-<style>
-    .table-responsive {
-        max-height: 500px;
-        overflow-y: auto;
-    }
-
-    .card {
-        margin-bottom: 20px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .btn-group form {
-        margin-right: 5px;
-    }
-</style>

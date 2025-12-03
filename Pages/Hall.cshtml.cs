@@ -22,6 +22,9 @@ namespace RestaurantOrderSystem.Pages
         }
 
         public List<Table> Tables { get; set; } = new List<Table>();
+        public string? ErrorMessage { get; set; }
+        public string? SuccessMessage { get; set; }
+
         public async Task OnGetAsync()
         {
             var response = await _httpClient.GetAsync("/api/tables");
@@ -71,24 +74,58 @@ namespace RestaurantOrderSystem.Pages
 
         public async Task<IActionResult> OnPostDeleteTable(int row, int col)
         {
-            var response = await _httpClient.DeleteAsync($"api/tables/{row}/{col}");
-
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return RedirectToPage();
+                var response = await _httpClient.DeleteAsync($"api/tables/{row}/{col}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = $"Table at row {row}, column {col} has been deleted successfully.";
+                    return RedirectToPage();
+                }
+                else if (response.StatusCode == System.Net.HttpStatusCode.NotFound)
+                {
+                    TempData["Error"] = $"Table at row {row}, column {col} does not exist. Cannot delete a non-existent table.";
+                }
+                else
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    TempData["Error"] = $"Failed to delete table: {errorContent}";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                TempData["Error"] = "An error occurred while trying to delete the table.";
             }
 
-            return Page();
+            return RedirectToPage();
         }
+
         public async Task<IActionResult> OnPostDeleteTables()
         {
-            var response = await _httpClient.DeleteAsync($"api/tables");
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return RedirectToPage();
+                var response = await _httpClient.DeleteAsync($"api/tables");
+                if (response.IsSuccessStatusCode)
+                {
+                    TempData["Success"] = "All tables have been deleted successfully.";
+                    return RedirectToPage();
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to delete all tables.";
+                }
             }
-            return Page();
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Exception: {ex.Message}");
+                TempData["Error"] = "An error occurred while trying to delete tables.";
+            }
+
+            return RedirectToPage();
         }
+
         public async Task<IActionResult> OnPostUpdateTableAsync(int id, int row, int col, int num)
         {
             var updatedTable = new Table

@@ -121,102 +121,102 @@ builder.Services.AddAuthentication(options =>
         RoleClaimType = ClaimTypes.Role,
         ClockSkew = TimeSpan.Zero
     };
-})
-.AddOpenIdConnect("Google", options =>
-{
-    options.Authority = "https://accounts.google.com";
-    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
-    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-    options.ResponseType = OpenIdConnectResponseType.Code;
-    options.SaveTokens = true;
-
-    options.CallbackPath = "/signin-google";
-    options.SignedOutCallbackPath = "/signout-callback-google";
-
-    options.Scope.Add("email");
-    options.Scope.Add("profile");
-    options.Scope.Add("openid");
-
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        NameClaimType = "name",
-        RoleClaimType = ClaimTypes.Role
-    };
-
-    options.Events = new OpenIdConnectEvents
-    {
-        OnRedirectToIdentityProvider = context =>
-        {
-            context.ProtocolMessage.RedirectUri =
-                $"{context.Request.Scheme}://{context.Request.Host}{options.CallbackPath}";
-            return Task.CompletedTask;
-        },
-        OnTokenValidated = async context =>
-        {
-            try
-            {
-                var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value
-                            ?? context.Principal?.FindFirst("email")?.Value;
-
-                if (string.IsNullOrEmpty(email))
-                {
-                    return;
-                }
-
-                using var scope = context.HttpContext.RequestServices.CreateScope();
-                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var jwtService = scope.ServiceProvider.GetRequiredService<IJwtAuthService>();
-
-                var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
-
-                if (user == null)
-                {
-                    user = new User
-                    {
-                        Email = email,
-                        Username = GenerateUsernameFromEmail(email),
-                        Password = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
-                        Role = Role.Unassigned
-                    };
-
-                    dbContext.Users.Add(user);
-                    await dbContext.SaveChangesAsync();
-                }
-
-                // Sign into cookie auth for UI
-                await jwtService.SignInWithCookieAsync(context.HttpContext, user);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Token validation error: {ex.Message}");
-            }
-        },
-        OnAuthenticationFailed = context =>
-        {
-            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
-            context.Response.Redirect("/Login?error=auth_failed");
-            context.HandleResponse();
-            return Task.CompletedTask;
-        },
-        OnAccessDenied = context =>
-        {
-            context.Response.Redirect("/Login?error=access_denied");
-            context.HandleResponse();
-            return Task.CompletedTask;
-        }
-    };
 });
+//.AddOpenIdConnect("Google", options =>
+//{
+//    options.Authority = "https://accounts.google.com";
+//    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+//    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+//    options.ResponseType = OpenIdConnectResponseType.Code;
+//    options.SaveTokens = true;
 
-static string GenerateUsernameFromEmail(string email)
-{
-    var username = email.Split('@')[0];
-    username = System.Text.RegularExpressions.Regex.Replace(username, @"[^a-zA-Z0-9]", "");
-    if (string.IsNullOrEmpty(username))
-    {
-        username = "user" + DateTime.Now.Ticks.ToString()[10..];
-    }
-    return username;
-}
+//    options.CallbackPath = "/signin-google";
+//    options.SignedOutCallbackPath = "/signout-callback-google";
+
+//    options.Scope.Add("email");
+//    options.Scope.Add("profile");
+//    options.Scope.Add("openid");
+
+//    options.TokenValidationParameters = new TokenValidationParameters
+//    {
+//        NameClaimType = "name",
+//        RoleClaimType = ClaimTypes.Role
+//    };
+
+//    options.Events = new OpenIdConnectEvents
+//    {
+//        OnRedirectToIdentityProvider = context =>
+//        {
+//            context.ProtocolMessage.RedirectUri =
+//                $"{context.Request.Scheme}://{context.Request.Host}{options.CallbackPath}";
+//            return Task.CompletedTask;
+//        },
+//        OnTokenValidated = async context =>
+//        {
+//            try
+//            {
+//                var email = context.Principal?.FindFirst(ClaimTypes.Email)?.Value
+//                            ?? context.Principal?.FindFirst("email")?.Value;
+
+//                if (string.IsNullOrEmpty(email))
+//                {
+//                    return;
+//                }
+
+//                using var scope = context.HttpContext.RequestServices.CreateScope();
+//                var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+//                var jwtService = scope.ServiceProvider.GetRequiredService<IJwtAuthService>();
+
+//                var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+
+//                if (user == null)
+//                {
+//                    user = new User
+//                    {
+//                        Email = email,
+//                        Username = GenerateUsernameFromEmail(email),
+//                        Password = BCrypt.Net.BCrypt.HashPassword(Guid.NewGuid().ToString()),
+//                        Role = Role.Unassigned
+//                    };
+
+//                    dbContext.Users.Add(user);
+//                    await dbContext.SaveChangesAsync();
+//                }
+
+//                // Sign into cookie auth for UI
+//                await jwtService.SignInWithCookieAsync(context.HttpContext, user);
+//            }
+//            catch (Exception ex)
+//            {
+//                Console.WriteLine($"Token validation error: {ex.Message}");
+//            }
+//        },
+//        OnAuthenticationFailed = context =>
+//        {
+//            Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+//            context.Response.Redirect("/Login?error=auth_failed");
+//            context.HandleResponse();
+//            return Task.CompletedTask;
+//        },
+//        OnAccessDenied = context =>
+//        {
+//            context.Response.Redirect("/Login?error=access_denied");
+//            context.HandleResponse();
+//            return Task.CompletedTask;
+//        }
+//    };
+//});
+
+//static string GenerateUsernameFromEmail(string email)
+//{
+//    var username = email.Split('@')[0];
+//    username = System.Text.RegularExpressions.Regex.Replace(username, @"[^a-zA-Z0-9]", "");
+//    if (string.IsNullOrEmpty(username))
+//    {
+//        username = "user" + DateTime.Now.Ticks.ToString()[10..];
+//    }
+//    return username;
+//}
 
 // Session
 builder.Services.AddSession(options =>
@@ -230,8 +230,10 @@ builder.Services.AddSession(options =>
 // Database
 if (builder.Environment.IsProduction())
 {
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-                          ?? "Data Source=restaurant.db";
+    //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+    //                      ?? "Data Source=restaurant.db";
+    var connectionString = Environment.GetEnvironmentVariable("DefaultConnection")
+                       ?? "Data Source=/home/site/wwwroot/restaurant.db";
     builder.Services.AddDbContext<AppDbContext>(options =>
         options.UseSqlite(connectionString));
 }
@@ -339,8 +341,7 @@ app.UseCookiePolicy();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// Map endpoints with clear scheme separation
-app.MapRazorPages(); // Uses Cookie authentication (default)
+app.MapRazorPages();
 
 // API controllers can use either scheme, but specify JWT as default for APIs
 app.MapControllers();
